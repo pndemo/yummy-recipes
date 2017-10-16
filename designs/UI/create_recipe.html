@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css"  media="screen,projection"/>
+    <!--Import style.css-->
+    <link type="text/css" rel="stylesheet" href="css/style.css"/>
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  </head>
+
+  <body>
+    <div class="main">            
+      <div class="caption logo2">
+        Yummy Recipes
+      </div>
+      <div class="container">
+      <div class="row">
+        <div class="col s12">
+          <div class="title">Create New Recipe</div>
+        </div>
+      </div>
+      <div class="row form-body">
+        <form class="col s12">
+          <div class="row">
+            <div class="input-field col s12">
+              <select>
+                <option value="" disabled selected>Choose your option</option>
+                <option value="1">Beverages</option>
+                <option value="2">Juices</option>
+                <option value="3">Snacks</option>
+                <option value="4">Desserts</option>
+              </select>
+              <label>Category</label>
+            </div>
+          </div>    
+          <div class="row">
+            <div class="input-field col s12">
+              <input id="title" type="text" class="validate">
+              <label for="title">Title</label>
+            </div>
+          </div>          
+          <div class="row">
+            <div class="input-field col s12">
+              <textarea id="ingredients" class="materialize-textarea"></textarea>
+              <label for="ingredients">Ingredients</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12">
+              <textarea id="directions" class="materialize-textarea"></textarea>
+              <label for="directions">Directions</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s12">
+              <button class="waves-effect waves-light btn-large" type="submit" name="action">CREATE
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    </div>
+    <!--Import jQuery before materialize.js-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        $('select').material_select();
+      });
+    </script>
+  </body>
+</html>
