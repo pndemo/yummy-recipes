@@ -1,0 +1,77 @@
+{% extends "index.html" %}
+{% block content %}
+<div class="main">  
+    <nav class="header">
+        <div class="nav-wrapper">
+            <a href="/recipes" class="brand-logo logo">Yummy Recipes</a>
+            <ul id="nav-mobile" class="right">
+                <li><a href="/recipes"><strong>Recipes</strong></a></li>
+                <li><a href="/categories"><strong>Categories</strong></a></li>
+                <li><a href="/logout" class="btn waves-effect waves-light" href="buttons.html">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="main-container">
+        <div class="row">
+            <div class="col s12">
+              <div class="title">Update Recipe Category</div>
+            </div>
+          </div>
+          <div class="row form-body">
+              <form class="col s12" action="/update_recipe?item_no={{ item_no }}" method="post" >  
+                <div class="row">
+                  <div class="input-field col s12">
+                    <select name="category" required>
+                      <option value="" disabled>Choose your option</option>
+                      {% for category_no, category_name in categories %}
+                      {% if category_no == item_no %}
+                      <option value="{{ category_no }}" selected>{{ category_name }}</option>
+                      {% else %}
+                      <option value="{{ category_no }}">{{ category_name }}</option>
+                      {% endif %}
+                      {% endfor %}
+                    </select>
+                    <label>Category</label>
+                  </div>
+                </div>    
+                <div class="row">
+                  <div class="input-field col s12">
+                    <input id="title" type="text" name="title" value="{{ title }}" class="validate" required>
+                    <label for="title">Title</label>
+                  </div>
+                </div>          
+                <div class="row">
+                  <div class="input-field col s12">
+                    <textarea id="ingredients" name="ingredients" class="materialize-textarea" required>
+                        {{ ingredients }}
+                    </textarea>
+                    <label for="ingredients">Ingredients</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s12">
+                    <textarea id="directions" name="directions" class="materialize-textarea" required>
+                        {{ directions }}
+                    </textarea>
+                    <label for="directions">Directions</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col s12">
+                    <button class="waves-effect waves-light btn-large" type="submit" name="action">UPDATE
+                    </button>
+                  </div>
+                </div>
+            </form>
+          </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12 center-align">
+            <div class="footer2">
+                &copy; 2017 Yummy Recipes
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

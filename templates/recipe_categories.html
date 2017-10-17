@@ -1,0 +1,43 @@
+{% extends "index.html" %}
+{% block content %}
+<div class="main">  
+    <nav class="header">
+        <div class="nav-wrapper">
+            <a href="/recipes" class="brand-logo logo">Yummy Recipes</a>
+            <ul id="nav-mobile" class="right">
+                <li><a href="/recipes"><strong>Recipes</strong></a></li>
+                <li><a href="/categories"><strong>Categories</strong></a></li>
+                <li><a href="/logout" class="btn waves-effect waves-light" href="buttons.html">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="main-container">
+        <div class="row">
+            <div class="col s12">
+              <div class="title">Recipe Categories</div>
+            </div>
+          </div>
+          <ul class="collection with-header">
+              {% for item_no, category_name in categories %}
+              <li class="collection-item"><div><a href="/update_category?item_no={{ item_no }}">{{ category_name }}</a>
+                <a href="/delete_category?item_no={{ item_no }}" class="secondary-content"><i class="material-icons">delete</i></a>
+              </div></li>
+              {% else %}
+              
+              {% endfor %}
+          </ul>
+        <div class="fixed-action-btn add">
+            <a href="/create_category" class="btn-floating btn-large waves-effect waves-light red">
+                <i class="material-icons">add</i>
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12 center-align">
+            <div class="footer2">
+                &copy; 2017 Yummy Recipes
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

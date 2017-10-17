@@ -1,0 +1,61 @@
+{% extends "index.html" %}
+{% block content %}
+<div class="main">  
+    <nav class="header">
+        <div class="nav-wrapper">
+            <a href="/recipes" class="brand-logo logo">Yummy Recipes</a>
+            <ul id="nav-mobile" class="right">
+                <li><a href="/recipes"><strong>Recipes</strong></a></li>
+                <li><a href="/categories"><strong>Categories</strong></a></li>
+                <li><a href="/logout" class="btn waves-effect waves-light" href="buttons.html">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="main-container">
+        <div class="row">
+            <div class="col s12">
+                <div class="title">Recipes</div>
+            </div>
+        </div>
+        {% for item_no, category, title, ingredients, directions in recipes %}
+            <div class="row">
+                    <div class="col s12 m6">
+                      <div class="card green darken-1">
+                        <div class="card-content">
+                          <span class="card-title"><strong>{{ title }}</strong></span>
+                          <p>
+                            <strong>Ingredients</strong><br/>
+                            {{ ingredients }}
+                          </p>
+                          <br/>
+                          <p>
+                            <strong>Directions</strong><br/>
+                            {{ directions }}
+                          </p>
+                        </div>
+                        <div class="card-action">
+                            <a href="/update_recipe?item_no={{ item_no }}">Update</a>
+                            <a href="/delete_recipe?item_no={{ item_no }}">Delete</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div> 
+        {% else %}
+                
+        {% endfor %}
+        <div class="fixed-action-btn add">
+            <a href="/create_recipe" class="btn-floating btn-large waves-effect waves-light red">
+                <i class="material-icons">add</i>
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12 center-align">
+            <div class="footer2">
+                &copy; 2017 Yummy Recipes
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

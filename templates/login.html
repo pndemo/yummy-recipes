@@ -1,0 +1,46 @@
+{% extends "index.html" %}
+{% block content %}
+<div class="main">            
+    <div class="caption logo">
+        Yummy Recipes
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col s12">
+                <div class="title">Login</div>
+            </div>
+        </div>
+        {% if error %}
+        <div class="center-align red lighten-2"><p>{{ error }}</p></div>
+        {% endif %}
+        <div class="row form-body">
+            <form class="col s12" action="/login" method="post" >
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="email" type="email" name="email" class="validate" required>
+                        <label for="email">Email address</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="password" type="password" name="password" class="validate" required>
+                        <label for="password">Password</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <button class="waves-effect waves-light btn-large red" type="submit" name="action">LOGIN</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12 center-align">
+            <div class="footer2">
+                &copy; 2017 Yummy Recipes
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

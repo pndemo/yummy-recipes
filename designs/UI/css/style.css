@@ -4,7 +4,7 @@ body, html {
 }
 
 .background {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url("background.jpg");
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("background.jpg");
     height: 100%;
     position: relative;
     background-position: center;
@@ -13,9 +13,7 @@ body, html {
   }
 
 .main {
-    background-attachment: fixed;
-    background-image: url(asfalt-dark.png);
-    background-repeat:repeat;
+    background-color: white;
   }
   
   .caption {
@@ -24,16 +22,6 @@ body, html {
   }
   
   .logo {
-    color: white;
-    font-family: Courier;
-    font-weight: bold;
-    font-style: italic;
-    font-size: 4em;
-    text-shadow: 0 0 0.2em #000;
-    -moz-text-shadow: 0 0 0.2em #000;
-    -webkit-text-shadow: 0 0 0.2em #000;
-}
-.logo2 {
     color: red;
     font-family: Courier;
     font-weight: bold;
@@ -44,16 +32,41 @@ body, html {
     -webkit-text-shadow: 0 0 0.2em #000;
 }
 
+.slogan {
+    color: white;
+    padding: 1em 2em;
+    text-shadow: 0 0 0.2em #000;
+    -moz-text-shadow: 0 0 0.2em #000;
+    -webkit-text-shadow: 0 0 0.2em #000;
+}
+
+.footer {
+    bottom: 0;
+    color: white;
+    height: 65px;
+    left: 0;
+    position: absolute;
+    width: 100%;
+}
+.footer2 {
+    bottom: 0;
+    color: #333333;
+    height: 65px;
+    left: 0;
+    position: absolute;
+    width: 100%;
+}
+
 .container {
     background: white;
     border-radius: 5px;
-    border: 1px solid slategray;
+    border: 1px solid #FF7F7F;
     min-height: 10em;
 }
 
 .title {
     font-size: 3em;
-    border-bottom: 1px solid slategray;
+    border-bottom: 1px solid #FF7F7F;
     color: #333333;
     width: 100%;
     text-align: center;
