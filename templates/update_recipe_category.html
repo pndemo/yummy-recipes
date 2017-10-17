@@ -1,0 +1,45 @@
+{% extends "index.html" %}
+{% block content %}
+<div class="main">  
+    <nav class="header">
+        <div class="nav-wrapper">
+            <a href="/recipes" class="brand-logo logo">Yummy Recipes</a>
+            <ul id="nav-mobile" class="right">
+                <li><a href="/recipes"><strong>Recipes</strong></a></li>
+                <li><a href="/categories"><strong>Categories</strong></a></li>
+                <li><a href="/logout" class="btn waves-effect waves-light" href="buttons.html">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="main-container">
+      <div class="row">
+        <div class="col s12">
+          <div class="title">Update Recipe Category</div>
+        </div>
+      </div>
+      <div class="row form-body">
+          <form class="col s12" action="/update_category?item_no={{ item_no }}" method="post" >
+          <div class="row">
+            <div class="input-field col s12">
+              <input id="category_name" type="text" name="category_name" value="{{ category_name }}" class="validate" required>
+              <label for="category_name">Category name</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s12">
+              <button class="waves-effect waves-light btn-large" type="submit" name="action">SAVE
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col s12 center-align">
+            <div class="footer2">
+                &copy; 2017 Yummy Recipes
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

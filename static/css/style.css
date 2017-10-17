@@ -1,0 +1,102 @@
+body, html {
+    height: 100%;
+    margin: 0;
+}
+
+.background {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("background.jpg");
+    height: 100%;
+    position: relative;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+.main {
+    background-color: white;
+  }
+  
+  .caption {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .logo {
+    color: red;
+    font-family: Courier;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 4em;
+    text-shadow: 0 0 0.2em #000;
+    -moz-text-shadow: 0 0 0.2em #000;
+    -webkit-text-shadow: 0 0 0.2em #000;
+}
+
+.slogan {
+    color: white;
+    padding: 1em 2em;
+    text-shadow: 0 0 0.2em #000;
+    -moz-text-shadow: 0 0 0.2em #000;
+    -webkit-text-shadow: 0 0 0.2em #000;
+}
+
+.footer {
+    bottom: 0;
+    color: white;
+    height: 65px;
+    left: 0;
+    position: absolute;
+    width: 100%;
+}
+.footer2 {
+    bottom: 0;
+    color: #333333;
+    height: 65px;
+    left: 0;
+    padding-top: 1em;
+    width: 100%;
+}
+
+.container {
+    background: white;
+    border-radius: 5px;
+    border: 1px solid #FF7F7F;
+    min-height: 10em;
+}
+
+.title {
+    font-size: 3em;
+    border-bottom: 1px solid #FF7F7F;
+    color: #333333;
+    width: 100%;
+    text-align: center;
+}
+
+.form-body {
+    padding-left: 4em;
+    padding-right: 4em;
+}
+
+.header {
+    padding-left: 4em;
+    padding-right: 4em;
+}
+
+.main-container {
+    margin-left: 4em;
+    margin-right: 4em;
+    padding: 1em;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border: 1px solid #FF7F7F;
+    min-height: 10em;
+}
+
+.add {
+    margin-bottom: 4em;
+    margin-right: 4em;
+}
+
+.collection-item:hover {
+    background-color: whitesmoke;
+}
