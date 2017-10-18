@@ -26,5 +26,5 @@ The UI templates of this app have been hosted on GitHub Pages and can be viewed 
 <h4>Hosted App</h4>
 Yummy Recipes has been hosted on Heroku.
 <ul>
-<li><a href="https://pndemo.github.io/yummy-recipes/">Try it out</a></li>
+<li><a href="https://serene-lake-56724.herokuapp.com/">Try it out</a></li>
 </ul>
