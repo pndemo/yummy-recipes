@@ -6,9 +6,9 @@
 <img class="notice-badge" src="https://coveralls.io/repos/github/pndemo/yummy-recipes/badge.svg?branch=develop" alt="Badge"/>
 </a>
 <br/>
-<h3>Introduction</h3>
+<h3>About Yummy Recipes</h3>
 Yummy Recipes app provides a platform for users to keep track of their awesome recipes and share with others if they so wish.
-The Yummy Recipes app has been beautifully designed with a number of functionalities that include: creation of new accounts, user login, creation of new recipe categories, viewing of recipe categories, updating of recipe categories, deletion of recipe categories, creation of new recipes, viewing of recipes, updating of recipes and deletion of recipes.
+The Yummy Recipes app has been beautifully designed with a number of functionalities that include: creation of new user accounts, user login, creation of new recipe categories, viewing of recipe categories, updating of recipe categories, deletion of recipe categories, creation of new recipes, viewing of recipes, updating of recipes and deletion of recipes.
 <h3>UI templates</h3>
 The UI templates of this app have been hosted on GitHub Pages and can be viewed by visiting the links below:
 <ul>
