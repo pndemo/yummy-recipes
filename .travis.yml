@@ -27,5 +27,5 @@ matrix:
 install:
   - pip install flask==$FLASK coverage
 script:
-- python setup.py test
+- python tests.py
 after_success: coveralls
