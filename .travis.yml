@@ -26,7 +26,6 @@ matrix:
       env: FLASK=0.8.1
 install:
   - pip install flask==$FLASK coverage
-  - pip install -e .
 script:
 - python setup.py test
 after_success: coveralls
