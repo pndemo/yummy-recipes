@@ -1,9 +1,9 @@
 <h1>Yummy Recipes</h1>
 <a href="https://travis-ci.org/pndemo/yummy-recipes">
-<img class="notice-badge" src="https://travis-ci.org/pndemo/yummy-recipes.svg?branch=develop" alt="Badge"/>
+<img class="notice-badge" src="https://travis-ci.org/pndemo/yummy-recipes.svg?branch=master" alt="Badge"/>
 </a>
 <a href="https://coveralls.io/github/pndemo/yummy-recipes">
-<img class="notice-badge" src="https://coveralls.io/repos/github/pndemo/yummy-recipes/badge.svg?branch=develop" alt="Badge"/>
+<img class="notice-badge" src="https://coveralls.io/repos/github/pndemo/yummy-recipes/badge.svg?branch=master" alt="Badge"/>
 </a>
 <br/>
 <h4>About Yummy Recipes</h4>
