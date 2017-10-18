@@ -1,20 +1,41 @@
+notifications:
+  email: false
+
+sudo: false
+
 language: python
+
+cache:
+  - pip
+
+env:
+  - REQUIREMENTS=lowest
+  - REQUIREMENTS=release
+
 python:
-  - "2.6"
   - "2.7"
-  - "3.2"
-  - "3.3"
   - "3.4"
   - "3.5"
-  - "3.5-dev" # 3.5 development branch
   - "3.6"
-  - "3.6-dev" # 3.6 development branch
-  - "3.7-dev" # 3.7 development branch
-  - "nightly"
-# command to install dependencies
+  - "pypy"
+
+matrix:
+  allow_failures:
+    - python: pypy
+  fast_finish: true
+
+before_install:
+  - "travis_retry pip install --upgrade pip setuptools py"
+  - "travis_retry pip install twine wheel coveralls requirements-builder"
+  - "requirements-builder --level=min setup.py > .travis-lowest-requirements.txt"
+  - "requirements-builder --level=pypi setup.py > .travis-release-requirements.txt"
+
 install:
-  - pip install -r requirements.txt
-# command to run tests
+  - "travis_retry pip install -r .travis-${REQUIREMENTS}-requirements.txt"
+  - "travis_retry pip install -e .[all]"
+
 script:
-  - pytest # or py.test for Python versions 3.5 and below
-after_success: coveralls
+  - "./run-tests.sh"
+
+after_success:
+- coveralls
