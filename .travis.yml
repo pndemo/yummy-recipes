@@ -1,41 +1,32 @@
-notifications:
-  email: false
-
-sudo: false
-
 language: python
-
-cache:
-  - pip
-
-env:
-  - REQUIREMENTS=lowest
-  - REQUIREMENTS=release
-
 python:
-  - "2.7"
-  - "3.4"
   - "3.5"
-  - "3.6"
-  - "pypy"
-
+  - "3.4"
+  - "3.3"
+  - "2.7"
+  - "2.6"
+env:
+  - FLASK=0.11.1
+  - FLASK=0.10.1
+  - FLASK=0.9
+  - FLASK=0.8.1
 matrix:
-  allow_failures:
-    - python: pypy
-  fast_finish: true
-
-before_install:
-  - "travis_retry pip install --upgrade pip setuptools py"
-  - "travis_retry pip install twine wheel coveralls requirements-builder"
-  - "requirements-builder --level=min setup.py > .travis-lowest-requirements.txt"
-  - "requirements-builder --level=pypi setup.py > .travis-release-requirements.txt"
-
+  exclude:
+    - python: "3.3"
+      env: FLASK=0.9
+    - python: "3.3"
+      env: FLASK=0.8.1
+    - python: "3.4"
+      env: FLASK=0.9
+    - python: "3.4"
+      env: FLASK=0.8.1
+    - python: "3.5"
+      env: FLASK=0.9
+    - python: "3.5"
+      env: FLASK=0.8.1
 install:
-  - "travis_retry pip install -r .travis-${REQUIREMENTS}-requirements.txt"
-  - "travis_retry pip install -e .[all]"
-
+  - pip install flask==$FLASK coverage
+  - pip install -e .
 script:
-  - "./run-tests.sh"
-
-after_success:
-- coveralls
+- python setup.py test
+after_success: coveralls
