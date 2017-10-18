@@ -6,20 +6,9 @@
 <img class="notice-badge" src="https://coveralls.io/repos/github/pndemo/yummy-recipes/badge.svg?branch=develop" alt="Badge"/>
 </a>
 <br/>
+<h3>Introduction</h3>
 Yummy Recipes app provides a platform for users to keep track of their awesome recipes and share with others if they so wish.
-The Yummy Recipes app has been beautifully designed with the following functionalities:
-<ul>
-<li>New account creation</li>
-<li>User login</li>
-<li>Creation of new recipe categories</li>
-<li>Viewing of recipe categories</li>
-<li>Updating of recipe categories</li>
-<li>Deletion of recipe categories</li>
-<li>Creation of new recipes</li>
-<li>Viewing of recipes</li>
-<li>Updating of recipes</li>
-<li>Deletion of recipes</li>
-</ul>
+The Yummy Recipes app has been beautifully designed with a number of functionalities that include: creation of new accounts, user login, creation of new recipe categories, viewing of recipe categories, updating of recipe categories, deletion of recipe categories, creation of new recipes, viewing of recipes, updating of recipes and deletion of recipes.
 <h3>UI templates</h3>
 The UI templates of this app have been hosted on GitHub Pages and can be viewed by visiting the links below:
 <ul>
@@ -35,5 +24,7 @@ The UI templates of this app have been hosted on GitHub Pages and can be viewed 
 <li><a href="https://pndemo.github.io/yummy-recipes/designs/UI/delete_recipe.html">Delete Recipe<a></li>
 </ul>
 <h3>Hosted app</h3>
-Yummy Recipes has been hosted on Heroku.<br/>
-<a href="https://pndemo.github.io/yummy-recipes/">Try it out</a>
+Yummy Recipes has been hosted on Heroku.
+<ul>
+<li><a href="https://pndemo.github.io/yummy-recipes/">Try it out</a></li>
+</ul>
