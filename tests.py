@@ -1,23 +1,34 @@
-import unittest 
+""" Yummy Recipes Application """
+
+import unittest
 from app import app
 from urllib.request import urlopen
+
+SECRET_KEY = 'A0hdjdHDH576dnfZr98j/3yX R~XHH!jmN]LWX/hRT'
 
 class BasicTests(unittest.TestCase):
     # Testing configuration
     def setUp(self):
+        app.config['SECRET_KEY'] = SECRET_KEY
         self.app = app.test_client()
         self.app.testing = True
 
     # Test if the application is up and running
     def test_application_up_and_running(self):
-        result = self.app.get('/') 
+        result = self.app.get('/')
         self.assertEqual(result.status_code, 200)
 
 class RegisterTests(unittest.TestCase):
     # Testing configuration
     def setUp(self):
+        app.config['SECRET_KEY'] = SECRET_KEY
         self.app = app.test_client()
         self.app.testing = True
+
+    # Test if the registration page is up and running
+    def test_page_up_and_running(self):
+        result = self.app.get('/register')
+        self.assertEqual(result.status_code, 200)
 
     # Registration helper method
     def register(self, email, password, confirm_password):
@@ -35,8 +46,14 @@ class RegisterTests(unittest.TestCase):
 class LoginTests(unittest.TestCase):
     # Testing configuration
     def setUp(self):
+        app.config['SECRET_KEY'] = SECRET_KEY
         self.app = app.test_client()
         self.app.testing = True
+
+    # Test if the login page is up and running
+    def test_page_up_and_running(self):
+        result = self.app.get('/login')
+        self.assertEqual(result.status_code, 200)
 
     # Login helper method
     def login(self, email, password):
@@ -51,11 +68,36 @@ class LoginTests(unittest.TestCase):
         response = self.login('example@domain.com', 'Bootcamp17')
         self.assertEqual(response.status_code, 200)
 
+class LogoutTests(unittest.TestCase):
+    # Testing configuration
+    def setUp(self):
+        app.config['SECRET_KEY'] = SECRET_KEY
+        self.app = app.test_client()
+        self.app.testing = True
+
+    # Logout helper method
+    def logout(self):
+        return self.app.get(
+        '/logout',
+        follow_redirects=True
+        )
+
+    # Test for successful logout
+    def test_user_logout(self):
+        response = self.logout()
+        self.assertEqual(response.status_code, 200)
+
 class CreateCategoryTests(unittest.TestCase):
     # Testing configuration
     def setUp(self):
+        app.config['SECRET_KEY'] = SECRET_KEY
         self.app = app.test_client()
         self.app.testing = True
+
+    # Test if the create category page is up and running
+    def test_page_up_and_running(self):
+        result = self.app.get('/create_category')
+        self.assertEqual(result.status_code, 302)
 
     # Create Category helper method
     def create_category(self, category_name):
@@ -73,8 +115,14 @@ class CreateCategoryTests(unittest.TestCase):
 class UpdateCategoryTests(unittest.TestCase):
     # Testing configuration
     def setUp(self):
+        app.config['SECRET_KEY'] = SECRET_KEY
         self.app = app.test_client()
         self.app.testing = True
+
+    # Test if the update category page is up and running
+    def test_page_up_and_running(self):
+        result = self.app.get('/update_category?item_no=1')
+        self.assertEqual(result.status_code, 302)
 
     # Update Category helper method
     def update_category(self, category_name):
@@ -92,8 +140,14 @@ class UpdateCategoryTests(unittest.TestCase):
 class DeleteCategoryTests(unittest.TestCase):
     # Testing configuration
     def setUp(self):
+        app.config['SECRET_KEY'] = SECRET_KEY
         self.app = app.test_client()
         self.app.testing = True
+
+    # Test if the delete category page is up and running
+    def test_page_up_and_running(self):
+        result = self.app.get('/delete_category?item_no=1')
+        self.assertEqual(result.status_code, 302)
 
     # Update Delete helper method
     def delete_category(self):
@@ -110,8 +164,14 @@ class DeleteCategoryTests(unittest.TestCase):
 class CreateRecipeTests(unittest.TestCase):
     # Testing configuration
     def setUp(self):
+        app.config['SECRET_KEY'] = SECRET_KEY
         self.app = app.test_client()
         self.app.testing = True
+
+    # Test if the create recipe page is up and running
+    def test_page_up_and_running(self):
+        result = self.app.get('/create_recipe')
+        self.assertEqual(result.status_code, 302)
 
     # Create Recipe helper method
     def create_recipe(self, category, title, ingredients, directions):
@@ -139,8 +199,14 @@ class CreateRecipeTests(unittest.TestCase):
 class UpdateRecipeTests(unittest.TestCase):
     # Testing configuration
     def setUp(self):
+        app.config['SECRET_KEY'] = SECRET_KEY
         self.app = app.test_client()
         self.app.testing = True
+
+    # Test if the update recipe page is up and running
+    def test_page_up_and_running(self):
+        result = self.app.get('/update_recipe?item_no=1')
+        self.assertEqual(result.status_code, 302)
 
     # Update Recipe helper method
     def update_recipe(self, category, title, ingredients, directions):
@@ -168,8 +234,14 @@ class UpdateRecipeTests(unittest.TestCase):
 class DeleteRecipeTests(unittest.TestCase):
     # Testing configuration
     def setUp(self):
+        app.config['SECRET_KEY'] = SECRET_KEY
         self.app = app.test_client()
         self.app.testing = True
+
+    # Test if the delete recipe page is up and running
+    def test_page_up_and_running(self):
+        result = self.app.get('/delete_recipe?item_no=1')
+        self.assertEqual(result.status_code, 302)
 
     # Delete Recipe helper method
     def delete_recipe(self):
