@@ -10,21 +10,29 @@
                 <div class="title">Login</div>
             </div>
         </div>
-        {% if error %}
-        <div class="center-align red lighten-2"><p>{{ error }}</p></div>
+        {% if new_user %}
+        <div class="center-align green lighten-1"><p>Your user account has been created</p></div>
+        {% elif failed_login %}
+        <div class="center-align red lighten-1"><p>The email/password entered is invalid</p></div>
         {% endif %}
         <div class="row form-body">
             <form class="col s12" action="/login" method="post" >
                 <div class="row">
                     <div class="input-field col s12">
-                        <input id="email" type="email" name="email" class="validate" required>
+                        <input type="text" name="email" value="{{ email }}">
                         <label for="email">Email address</label>
+                        {% if validation_msgs and (validation_msgs[0] != 'Valid') %}
+                        <div class="error-msg">{{ validation_msgs[0] }}</div>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
-                        <input id="password" type="password" name="password" class="validate" required>
+                        <input type="password" name="password" value="{{ password }}">
                         <label for="password">Password</label>
+                        {% if validation_msgs and (validation_msgs[1] != 'Valid') %}
+                        <div class="error-msg">{{ validation_msgs[1] }}</div>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="row">

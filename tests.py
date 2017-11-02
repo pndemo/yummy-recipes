@@ -7,83 +7,88 @@ from urllib.request import urlopen
 SECRET_KEY = 'A0hdjdHDH576dnfZr98j/3yX R~XHH!jmN]LWX/hRT'
 
 class BasicTests(unittest.TestCase):
-    # Testing configuration
+    """ Basic tests """
+
     def setUp(self):
         app.config['SECRET_KEY'] = SECRET_KEY
         self.app = app.test_client()
         self.app.testing = True
 
-    # Test if the application is up and running
     def test_application_up_and_running(self):
+        """ Test if the application is up and running """
         result = self.app.get('/')
         self.assertEqual(result.status_code, 200)
 
 class RegisterTests(unittest.TestCase):
-    # Testing configuration
+    """ Registration tests """
+
     def setUp(self):
         app.config['SECRET_KEY'] = SECRET_KEY
         self.app = app.test_client()
         self.app.testing = True
 
-    # Test if the registration page is up and running
     def test_page_up_and_running(self):
+        """ Test if the registration page is up and running """
         result = self.app.get('/register')
         self.assertEqual(result.status_code, 200)
 
-    # Registration helper method
-    def register(self, email, password, confirm_password):
-        return self.app.post(
-        '/register',
-        data=dict(email=email, password=password, confirm_password=confirm_password),
-        follow_redirects=True
+    def register(self, first_name, last_name, email, password, confirm_password):
+        """ Registration helper method """
+        return self.app.post('/register', data=dict(first_name=first_name,
+                last_name=last_name, email=email, password=password,
+                confirm_password=confirm_password),
+                follow_redirects=True
         )
 
-    # Test for successful registration
     def test_user_registration(self):
-        response = self.register('example@domain.com', 'Bootcamp17', 'Bootcamp17')
+        """ Test for successful registration """
+        response = self.register('Paul', 'Ndemo', 'example@domain.com', 'Bootcamp17', \
+                'Bootcamp17')
         self.assertEqual(response.status_code, 200)
 
 class LoginTests(unittest.TestCase):
-    # Testing configuration
+    """ Test for user login """
+
     def setUp(self):
         app.config['SECRET_KEY'] = SECRET_KEY
         self.app = app.test_client()
         self.app.testing = True
 
-    # Test if the login page is up and running
     def test_page_up_and_running(self):
+        """ Test if the login page is up and running s"""
         result = self.app.get('/login')
         self.assertEqual(result.status_code, 200)
 
-    # Login helper method
     def login(self, email, password):
+        """ Login helper method """
         return self.app.post(
         '/login',
         data=dict(email=email, password=password),
         follow_redirects=True
         )
 
-    # Test for successful login
     def test_user_login(self):
+        """ Test for successful login """
         response = self.login('example@domain.com', 'Bootcamp17')
         self.assertEqual(response.status_code, 200)
 
 class LogoutTests(unittest.TestCase):
-    # Testing configuration
+    """ Test for user logout """
+
     def setUp(self):
         app.config['SECRET_KEY'] = SECRET_KEY
         self.app = app.test_client()
         self.app.testing = True
 
-    # Logout helper method
     def logout(self):
+        """ Logout helper method """
         return self.app.get(
         '/logout',
         follow_redirects=True
         )
 
-    # Test for successful logout
     def test_user_logout(self):
+        """ Test for successful logout          `"""
         response = self.logout()
         self.assertEqual(response.status_code, 200)
 

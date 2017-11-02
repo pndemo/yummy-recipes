@@ -3,11 +3,15 @@
 <div class="main">  
     <nav class="header">
         <div class="nav-wrapper">
-            <a href="/recipes" class="brand-logo logo">Yummy Recipes</a>
-            <ul id="nav-mobile" class="right">
-                <li><a href="/recipes"><strong>Recipes</strong></a></li>
-                <li><a href="/categories"><strong>Categories</strong></a></li>
-                <li><a href="/logout" class="btn waves-effect waves-light" href="buttons.html">Logout</a></li>
+            <a href="/home" class="brand-logo logo">Yummy Recipes</a>
+            <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+            <ul class="right hide-on-med-and-down">
+            <li><a href="/profile"><i class="material-icons left">account_circle</i>{{ user[1] }}</a></li>
+            <li><a href="/logout" class="btn waves-effect waves-light" href="buttons.html">Logout</a></li>
+            </ul>
+            <ul class="side-nav" id="mobile-demo">
+            <li><a href="/profile"><i class="material-icons left">account_circle</i>{{ user[1] }}</a></li>
+            <li><a href="/logout" class="btn waves-effect waves-light" href="buttons.html">Logout</a></li>
             </ul>
         </div>
     </nav>
@@ -18,10 +22,10 @@
         </div>
       </div>
       <div class="row form-body">
-        <form class="col s12" action="/delete_recipe?item_no={{ item_no }}" method="post" >
+        <form class="col s12" action="/delete_recipe?category_id={{ recipe[0] }}&recipe_id={{ recipe[4] }}" method="post" >
           <div class="row">
               <div class="col s12">
-                  <p>Recipe <strong>{{ title }}</strong> will be deleted.</p>
+                  <p>Recipe <strong>{{ recipe[1] }}</strong> will be deleted.</p>
               </div>
           </div>
           <div class="row">

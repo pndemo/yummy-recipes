@@ -18,23 +18,30 @@
     <div class="main-container">
         <div class="row">
             <div class="col s12">
-                <div class="title">Delete Recipe Category</div>
+                <div class="title">{{ recipe[1] }}</div>
             </div>
         </div>
-        <div class="row form-body">
-            <form class="col s12" action="/delete_category?category_id={{ category_id }}" method="post" >
-                <div class="row">
-                    <div class="col s12">
-                        <p>Category <strong>{{ category_name }}</strong> will be deleted.</p>
+        <div class="row">
+            <div class="col s12">
+                <div class="card category-card">
+                    <div class="card-content">
+                        <span class="card-title">#{{ category[1] }}</span>
+                        <p>
+                            <strong>Ingredients</strong><br/>
+                            {{ recipe[2] }}
+                        </p>
+                        <br/>
+                        <p>
+                            <strong>Directions</strong><br/>
+                            {{ recipe[3] }}
+                        </p>
+                    </div>
+                    <div class="card-action">
+                        <a href="/update_recipe?category_id={{ category[0] }}&recipe_id={{ recipe[0] }}">Edit</a>
+                        <a href="/delete_recipe?category_id={{ category[0] }}&recipe_id={{ recipe[0] }}">Delete</a>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col s12">
-                        <button class="waves-effect waves-light btn-large" type="submit" name="action">DELETE
-                        </button>
-                    </div>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
     <div class="row">

@@ -3,29 +3,51 @@
 <div class="main">  
     <nav class="header">
         <div class="nav-wrapper">
-            <a href="/recipes" class="brand-logo logo">Yummy Recipes</a>
-            <ul id="nav-mobile" class="right">
-                <li><a href="/recipes"><strong>Recipes</strong></a></li>
-                <li><a href="/categories"><strong>Categories</strong></a></li>
-                <li><a href="/logout" class="btn waves-effect waves-light" href="buttons.html">Logout</a></li>
+            <a href="/home" class="brand-logo logo">Yummy Recipes</a>
+            <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+            <ul class="right hide-on-med-and-down">
+            <li><a href="/profile"><i class="material-icons left">account_circle</i>{{ user[1] }}</a></li>
+            <li><a href="/logout" class="btn waves-effect waves-light" href="buttons.html">Logout</a></li>
+            </ul>
+            <ul class="side-nav" id="mobile-demo">
+            <li><a href="/profile"><i class="material-icons left">account_circle</i>{{ user[1] }}</a></li>
+            <li><a href="/logout" class="btn waves-effect waves-light" href="buttons.html">Logout</a></li>
             </ul>
         </div>
     </nav>
     <div class="main-container">
         <div class="row">
             <div class="col s12">
-              <div class="title">Recipe Categories</div>
+                <div class="title">Recipe Categories</div>
             </div>
-          </div>
-          <ul class="collection with-header">
-              {% for item_no, category_name in categories %}
-              <li class="collection-item"><div><a href="/update_category?item_no={{ item_no }}">{{ category_name }}</a>
-                <a href="/delete_category?item_no={{ item_no }}" class="secondary-content"><i class="material-icons">delete</i></a>
-              </div></li>
-              {% else %}
-              
-              {% endfor %}
-          </ul>
+        </div>
+        <div class="row">
+            {% for category in categories %}
+            <div class="col s12 m6 l4">
+                <div class="card category-card">
+                    <div class="card-content">
+                        <span class="card-title"><strong>{{ category[1] }}</strong></span>
+                        {% if category[3] == 1 %}
+                        <p>{{ category[3] }} recipe available</p>
+                        {% else %}
+                        <p>{{ category[3] }} recipes available</p>
+                        {% endif %}
+                    </div>
+                    <div class="card-action">
+                        <a href="/recipes?category_id={{ category[0] }}">Recipes</a>
+                        <a href="/update_category?category_id={{ category[0] }}">Edit</a>
+                        <a href="/delete_category?category_id={{ category[0] }}">Delete</a>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="row">
+                <div class="col s12 center-align">
+                    <p>No categories have been added yet.</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
         <div class="fixed-action-btn add">
             <a href="/create_category" class="btn-floating btn-large waves-effect waves-light red">
                 <i class="material-icons">add</i>

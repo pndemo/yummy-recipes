@@ -3,36 +3,42 @@
 <div class="main">  
     <nav class="header">
         <div class="nav-wrapper">
-            <a href="/recipes" class="brand-logo logo">Yummy Recipes</a>
-            <ul id="nav-mobile" class="right">
-                <li><a href="/recipes"><strong>Recipes</strong></a></li>
-                <li><a href="/categories"><strong>Categories</strong></a></li>
-                <li><a href="/logout" class="btn waves-effect waves-light" href="buttons.html">Logout</a></li>
+            <a href="/home" class="brand-logo logo">Yummy Recipes</a>
+            <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+            <ul class="right hide-on-med-and-down">
+            <li><a href="/profile"><i class="material-icons left">account_circle</i>{{ user[1] }}</a></li>
+            <li><a href="/logout" class="btn waves-effect waves-light" href="buttons.html">Logout</a></li>
+            </ul>
+            <ul class="side-nav" id="mobile-demo">
+            <li><a href="/profile"><i class="material-icons left">account_circle</i>{{ user[1] }}</a></li>
+            <li><a href="/logout" class="btn waves-effect waves-light" href="buttons.html">Logout</a></li>
             </ul>
         </div>
     </nav>
     <div class="main-container">
         <div class="row">
             <div class="col s12">
-              <div class="title">Create Recipe Category</div>
+                <div class="title">Create Recipe Category</div>
             </div>
-          </div>
-          <div class="row form-body">
-              <form class="col s12" action="/create_category" method="post" >
-              <div class="row">
-                <div class="input-field col s12">
-                  <input id="category_name" type="text" name="category_name" class="validate" required>
-                  <label for="category_name">Category name</label>
+        </div>
+        <div class="row form-body">
+            <form class="col s12" action="/create_category" method="post" >
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input type="text" name="category_name" value="{{ category_name }}">
+                        <label for="category_name">Category name</label>
+                        {% if validation_msg != 'Valid' %}
+                        <div class="error-msg">{{ validation_msg }}</div>
+                        {% endif %}
+                    </div>
                 </div>
-              </div>
-              <div class="row">
-                <div class="col s12">
-                  <button class="waves-effect waves-light btn-large" type="submit" name="action">CREATE
-                  </button>
+                <div class="row">
+                    <div class="col s12">
+                        <button class="waves-effect waves-light btn-large" type="submit" name="action">CREATE
+                        </button>
+                    </div>
                 </div>
-              </div>
             </form>
-          </div>
         </div>
     </div>
     <div class="row">

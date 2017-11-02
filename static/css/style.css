@@ -73,18 +73,22 @@ body, html {
 }
 
 .form-body {
-    padding-left: 4em;
-    padding-right: 4em;
+    padding-left: 3em;
+    padding-right: 3em;
+}
+
+.error-msg {
+    color: red;
 }
 
 .header {
-    padding-left: 4em;
-    padding-right: 4em;
+    padding-left: 3em;
+    padding-right: 3em;
 }
 
 .main-container {
-    margin-left: 4em;
-    margin-right: 4em;
+    margin-left: 3em;
+    margin-right: 3em;
     padding: 1em;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
@@ -93,10 +97,14 @@ body, html {
 }
 
 .add {
-    margin-bottom: 4em;
-    margin-right: 4em;
+    margin-bottom: 3em;
+    margin-right: 3em;
 }
 
 .collection-item:hover {
     background-color: whitesmoke;
+}
+
+.category-card {
+    border: 1px solid #ffcdd2;
 }

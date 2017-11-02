@@ -18,23 +18,25 @@
     <div class="main-container">
         <div class="row">
             <div class="col s12">
-                <div class="title">Delete Recipe Category</div>
+                <div class="title">Profile</div>
             </div>
         </div>
-        <div class="row form-body">
-            <form class="col s12" action="/delete_category?category_id={{ category_id }}" method="post" >
-                <div class="row">
-                    <div class="col s12">
-                        <p>Category <strong>{{ category_name }}</strong> will be deleted.</p>
+        <div class="row">
+            <div class="col s12">
+                <div class="card category-card">
+                    <div class="card-content">
+                        <p>
+                            <strong>Full name</strong><br/>
+                            {{ user[1] }} {{ user[2] }}
+                        </p>
+                        <br/>
+                        <p>
+                            <strong>Email address</strong><br/>
+                            {{ user[3] }}
+                        </p>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col s12">
-                        <button class="waves-effect waves-light btn-large" type="submit" name="action">DELETE
-                        </button>
-                    </div>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
     <div class="row">
