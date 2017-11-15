@@ -6,11 +6,11 @@
             <a href="/home" class="brand-logo logo">Yummy Recipes</a>
             <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
             <ul class="right hide-on-med-and-down">
-            <li><a href="/profile"><i class="material-icons left">account_circle</i>{{ user[1] }}</a></li>
+            <li><a href="/profile"><i class="material-icons left">account_circle</i>{{ user['username'] }}</a></li>
             <li><a href="/logout" class="btn waves-effect waves-light" href="buttons.html">Logout</a></li>
             </ul>
             <ul class="side-nav" id="mobile-demo">
-            <li><a href="/profile"><i class="material-icons left">account_circle</i>{{ user[1] }}</a></li>
+            <li><a href="/profile"><i class="material-icons left">account_circle</i>{{ user['username'] }}</a></li>
             <li><a href="/logout" class="btn waves-effect waves-light" href="buttons.html">Logout</a></li>
             </ul>
         </div>
@@ -26,14 +26,18 @@
                 <div class="card category-card">
                     <div class="card-content">
                         <p>
-                            <strong>Full name</strong><br/>
-                            {{ user[1] }} {{ user[2] }}
+                            <strong>Username</strong><br/>
+                            {{ user['username'] }}
                         </p>
                         <br/>
                         <p>
                             <strong>Email address</strong><br/>
-                            {{ user[3] }}
+                            {{ user['email'] }}
                         </p>
+                    </div>
+                    <div class="card-action">
+                        <a href="/edit_profile">Edit Profile</a>
+                        <a href="/change_password">Change Password</a>
                     </div>
                 </div>
             </div>

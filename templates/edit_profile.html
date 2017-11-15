@@ -18,47 +18,36 @@
     <div class="main-container">
         <div class="row">
             <div class="col s12">
-              <div class="title">Update Recipe Category</div>
+                <div class="title">Edit Profile</div>
             </div>
-          </div>
-          <div class="row form-body">
-              <form class="col s12" action="/update_recipe?category_id={{ category_id }}&recipe_id={{ recipe_id }}" method="post" >   
+        </div>
+        <div class="row form-body">
+            <form class="col s12" action="/edit_profile" method="post" >
                 {{ form.csrf_token }}
                 <div class="row">
                     <div class="input-field col s12">
-                        {{ form.recipe_name }}
-                        {{ form.recipe_name.label }}
-                        {% for message in form.recipe_name.errors %}
-                        <div class="error-msg">{{ message }}</div>
-                        {% endfor %}
-                    </div>
-                </div>          
-                <div class="row">
-                    <div class="input-field col s12">
-                        {{ form.ingredients(class_="materialize-textarea space-wrap") }}
-                        {{ form.ingredients.label }}
-                        {% for message in form.ingredients.errors %}
+                        {{ form.username }}
+                        {{ form.username.label }}
+                        {% for message in form.username.errors %}
                         <div class="error-msg">{{ message }}</div>
                         {% endfor %}
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
-                        {{ form.directions(class_="materialize-textarea space-wrap") }}
-                        {{ form.directions.label }}
-                        {% for message in form.directions.errors %}
+                        {{ form.email }}
+                        {{ form.email.label }}
+                        {% for message in form.email.errors %}
                         <div class="error-msg">{{ message }}</div>
                         {% endfor %}
                     </div>
                 </div>
                 <div class="row">
                     <div class="col s12">
-                      <button class="waves-effect waves-light btn-large" type="submit" name="action">SAVE
-                      </button>
+                        <button class="waves-effect waves-light btn-large red" type="submit" name="submit">SAVE</button>
                     </div>
                 </div>
             </form>
-          </div>
         </div>
     </div>
     <div class="row">

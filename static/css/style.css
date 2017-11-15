@@ -50,8 +50,8 @@ body, html {
 }
 .footer2 {
     bottom: 0;
-    color: #333333;
-    height: 65px;
+    color: #666666;
+    height: 30px;
     left: 0;
     padding-top: 1em;
     width: 100%;
@@ -107,4 +107,13 @@ body, html {
 
 .category-card {
     border: 1px solid #ffcdd2;
+}
+
+.input-field {
+    margin-bottom: 0em !important;
+    margin-top: 0em !important;
+}
+
+.center {
+    text-align: center;
 }

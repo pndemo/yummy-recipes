@@ -2,12 +2,16 @@
 
 import random
 import string
-import validators
-from flask import Flask, session, request, redirect, render_template
-from flask.views import View
-from models import User, Category, Recipe
+from flask import Flask, session, request, redirect, render_template, url_for, flash
+from models.auth import User
+from models.category import Category
+from models.recipe import Recipe
+from forms.auth import RegisterForm, LoginForm, EditProfileForm, ChangePasswordForm
+from forms.category import CreateCategoryForm, UpdateCategoryForm
+from forms.recipe import CreateRecipeForm, UpdateRecipeForm
 
 app = Flask(__name__)
+app.debug = True
 
 SECRET_KEY = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(48))
 
@@ -15,440 +19,273 @@ user = User()
 category = Category()
 recipe = Recipe()
 
-class IndexView(View):
+@app.route('/', methods=['GET'])
+def index():
     """ Yummy Recipes Homepage """
 
-    methods = ['GET']
+    if 'logged_in' in session and session['logged_in']:
+        return redirect('/home')
+    return render_template('index.html')
 
-    def dispatch_request(self):
-        if 'logged_in' in session and session['logged_in']:
-            return redirect('/home')
-        return render_template('index.html')
-
-class RegisterView(View):
+@app.route('/register', methods=['GET', 'POST'])
+def register():
     """ Allows a user to create a new account """
 
-    methods = ['GET', 'POST']
+    if 'logged_in' in session and session['logged_in']:
+        return redirect('/home')
+    else:
+        form = RegisterForm(user.users)
+        if form.validate_on_submit():
+            user.register_user(form.username.data, form.email.data, form.password.data)
+            session['logged_in'] = False
+            flash('Your account has been created')
+            return redirect(url_for('login'))
+    return render_template('register.html', form=form)
 
-    def render_template(self, context):
-        """ Render registration template """
-        return render_template('register.html', **context)
-
-    def dispatch_request(self):
-        if 'logged_in' in session and session['logged_in']:
-            return redirect('/home')
-        else:
-            context = {'first_name': '',
-                       'last_name': '',
-                       'email': '',
-                       'password': '',
-                       'confirm_password': ''
-                      }
-            if request.method == 'POST':
-                first_name = request.form['first_name']
-                last_name = request.form['last_name']
-                email = request.form['email']
-                password = request.form['password']
-                confirm_password = request.form['confirm_password']
-                context = {'first_name': first_name,
-                           'last_name': last_name,
-                           'email': email,
-                           'password': password,
-                           'confirm_password': confirm_password
-                          }
-                validation_msgs = []
-                validation_msgs.append(validators.validate_first_name(first_name))
-                validation_msgs.append(validators.validate_last_name(last_name))
-                validation_msgs.append(validators.validate_user_email(email, user.records, True))
-                validation_msgs.append(validators.validate_password(password))
-                validation_msgs.append(validators.validate_confirm_password(password, \
-                        confirm_password))
-                for validation_msg in validation_msgs:
-                    if validation_msg != 'Valid':
-                        context['validation_msgs'] = validation_msgs
-                        return self.render_template(context)
-                user.create_user(first_name, last_name, email, password)
-                session['new_user'] = True
-                session['logged_in'] = False
-                return redirect('/login')
-        return self.render_template(context)
-
-class LoginView(View):
+@app.route('/login', methods=['GET', 'POST'])
+def login():
     """ Allows a user to login """
 
-    methods = ['GET', 'POST']
+    if 'logged_in' in session and session['logged_in']:
+        return redirect('/home')
+    else:
+        form = LoginForm(user)
+        if form.validate_on_submit():
+            session['logged_in'] = True
+            session['user'] = form.user
+            return redirect(url_for('categories'))
+    return render_template('login.html', form=form)
 
-    def render_template(self, context):
-        """ Render login template """
-        return render_template('login.html', **context)
+@app.route('/profile', methods=['GET'])
+def profile():
+    """ Display a user's info """
 
-    def dispatch_request(self):
-        if 'logged_in' in session and session['logged_in']:
-            return redirect('/home')
-        else:
-            if 'new_user' in session and session['new_user']:
-                new_user = True
-                session['new_user'] = False
-            else:
-                new_user = False
+    if 'logged_in' in session and session['logged_in']:
+        return render_template('profile.html', user=session['user'])
+    return redirect(url_for('login'))
 
-            context = {'email': '',
-                       'password': '',
-                       'new_user': new_user,
-                       'failed_login': False
-                      }
-                      
-            if request.method == 'POST':
-                email = request.form['email']
-                password = request.form['password']
-                context = {'email': email,
-                           'password': password
-                          }
-                validation_msgs = []
-                validation_msgs.append(validators.validate_user_email(email, user.records))
-                validation_msgs.append(validators.validate_password(password))
-                for validation_msg in validation_msgs:
-                    if validation_msg != 'Valid':
-                        context['validation_msgs'] = validation_msgs
-                        return self.render_template(context)
-                user_data = user.get_user_by_email(email)
-                if user_data and user_data[4] == password:
-                    session['logged_in'] = True
-                    session['user'] = user_data
-                    return redirect('/home')
-                else:
-                    context['failed_login'] = True
-        return self.render_template(context)
+@app.route('/edit_profile', methods=['GET', 'POST'])
+def edit_profile():
+    """ Allows a user to edit profile info """
 
-class CategoriesView(View):
-    """" Display a user's categories """
+    if 'logged_in' in session and session['logged_in']:
+        form = EditProfileForm(user.users, session['user']['user_id'])
+        if request.method == 'GET':
+            form = EditProfileForm(user.users, session['user']['user_id'], \
+                    session['user']['username'], session['user']['email'])
+        if form.validate_on_submit():
+            user.update_user_details(session['user']['user_id'], form.username.data, \
+                    form.email.data)
+            session['user'] = user.get_user_by_id(session['user']['user_id'])
+            return redirect(url_for('profile'))
+        return render_template('edit_profile.html', user=session['user'], form=form)
+    return redirect(url_for('login'))
 
-    methods = ['GET']
+@app.route('/change_password', methods=['GET', 'POST'])
+def change_password():
+    """ Allows a user to change password """
 
-    def render_template(self, context):
-        """ Render recipe categories template """
-        return render_template('recipe_categories.html', **context)
+    if 'logged_in' in session and session['logged_in']:
+        form = ChangePasswordForm(session['user'])
+        if form.validate_on_submit():
+            user.change_user_password(session['user']['user_id'], form.new_password.data)
+            session['user'] = user.get_user_by_id(session['user']['user_id'])
+            return redirect(url_for('profile'))
+        return render_template('change_password.html', user=session['user'], form=form)
+    return redirect(url_for('login'))
 
-    def dispatch_request(self):
-        if 'logged_in' in session and session['logged_in']:
-            categories = category.get_categories(session['user'][0])
-            categories_data = []
-            for cat in categories:
-                categories_data.append((cat[0], cat[1], cat[2], recipe.get_recipes_no(cat[0])))
-            context = {'user': session['user'],
-                       'categories': categories_data
-                      }
-            return self.render_template(context)
-        return redirect('/login')
+@app.route('/home', methods=['GET'])
+def categories():
+    """ Display a user's categories """
 
-class CreateCategoryView(View):
+    if 'logged_in' in session and session['logged_in']:
+        categories_data = category.get_user_categories(session['user']['user_id'])
+        categories_list = []
+        for cat in categories_data:
+            categories_list.append(
+                {
+                    'category_id': cat['category_id'],
+                    'category_name': cat['category_name'],
+                    'number_of_recipes': len(recipe.get_category_recipes(cat['category_id']))
+                }
+                )
+        return render_template('categories.html', user=session['user'], categories=categories_list)
+    return redirect(url_for('login'))
+
+@app.route('/create_category', methods=['GET', 'POST'])
+def create_category():
     """ Allows a user to add a new category """
 
-    methods = ['GET', 'POST']
+    if 'logged_in' in session and session['logged_in']:
+        categories_data = category.get_user_categories(session['user']['user_id'])
+        form = CreateCategoryForm(session['user'], categories_data)
+        if form.validate_on_submit():
+            category.create_category(form.category_name.data, session['user']['user_id'])
+            session['user'] = form.user
+            return redirect(url_for('categories'))
+        return render_template('create_category.html', user=session['user'], form=form)
+    return redirect(url_for('login'))
 
-    def render_template(self, context):
-        """ Render create recipe category template """
-        return render_template('create_recipe_category.html', **context)
-
-    def dispatch_request(self):
-        if 'logged_in' in session and session['logged_in']:
-            context = {'user': session['user'],
-                       'category_name': ''
-                      }
-            if request.method == 'POST':
-                category_name = request.form['category_name']
-                context = {'category_name': category_name}
-                categories = category.get_categories(session['user'][0])
-                validation_msg = validators.validate_category_name(category_name, categories)
-                if validation_msg != 'Valid':
-                    context['validation_msg'] = validation_msg
-                    return self.render_template(context)
-                category.create_category(category_name, session['user'][0])
-                return redirect('/home')
-            return self.render_template(context)
-        return redirect('/login')
-
-class UpdateCategoryView(View):
+@app.route('/update_category', methods=['GET', 'POST'])
+def update_category():
     """ Allows a user to update an existing category """
 
-    methods = ['GET', 'POST']
-
-    def render_template(self, context):
-        """ Render update recipe category template """
-        return render_template('update_recipe_category.html', **context)
-
-    def dispatch_request(self):
-        if 'logged_in' in session and session['logged_in']:
-            if request.values.get('category_id'):
-                category_id = int(request.values.get('category_id'))
-                category_data = category.get_category(category_id, session['user'][0])
-                if category_data:
-                    context = {'user': session['user'],
-                               'category_id': category_data[0],
-                               'category_name': category_data[1]
-                              }
-                    if request.method == 'POST':
-                        category_name = request.form['category_name']
-                        context['category_name'] = category_name
-                        categories = category.get_categories(session['user'][0])
-                        validation_msg = validators.validate_category_name(category_name, \
-                                categories, category_id)
-                        if validation_msg != 'Valid':
-                            context['validation_msg'] = validation_msg
-                            return self.render_template(context)
-                        category.update_category(category_id, category_name)
-                        return redirect('/home')
-                    return self.render_template(context)
-                else:
-                    return render_template('not_found.html', item_no=1)
+    if 'logged_in' in session and session['logged_in']:
+        if request.values.get('category_id'):
+            category_id = int(request.values.get('category_id'))
+            categories_data = category.get_user_categories(session['user']['user_id'])
+            category_data = category.get_category_details(category_id, session['user']['user_id'])
+            if category_data:
+                form = UpdateCategoryForm(session['user'], categories_data, \
+                        category_data['category_id'])
+                if request.method == 'GET':
+                    form = UpdateCategoryForm(session['user'], categories_data, \
+                            category_data['category_id'], category_data['category_name'])
+                if form.validate_on_submit():
+                    category.update_category_details(category_id, form.category_name.data)
+                    return redirect(url_for('categories'))
             else:
-                return render_template('not_found.html', item_no=1)
-        return redirect('/login')
+                return render_template('not_found.html')
+        else:
+            return render_template('not_found.html')
+        return render_template('update_category.html', user=session['user'], category_id= \
+                category_id, form=form)
+    return redirect(url_for('login'))
 
-class DeleteCategoryView(View):
+@app.route('/delete_category', methods=['GET', 'POST'])
+def delete_category():
     """ Allows a user to delete an existing category """
 
-    methods = ['GET', 'POST']
-
-    def render_template(self, context):
-        """ Render delete recipe category template """
-        return render_template('delete_recipe_category.html', **context)
-
-    def dispatch_request(self):
-        if 'logged_in' in session and session['logged_in']:
-            if request.values.get('category_id'):
-                category_id = int(request.values.get('category_id'))
-                category_data = category.get_category(category_id, session['user'][0])
-                if category_data:
-                    context = {'user': session['user'],
-                               'category_id': category_data[0],
-                               'category_name': category_data[1]
-                              }
-                    if request.method == 'POST':
-                        category.delete_category(category_id)
-                        recipe.delete_recipes(category_id)
-                        return redirect('/home')
-                    return self.render_template(context)
-                else:
-                    return render_template('not_found.html', item_no=1)
+    if 'logged_in' in session and session['logged_in']:
+        if request.values.get('category_id'):
+            category_id = int(request.values.get('category_id'))
+            category_data = category.get_category_details(category_id, session['user']['user_id'])
+            if category_data:
+                if request.method == 'POST':
+                    category.delete_categories(category_id=category_id)
+                    recipe.delete_recipes(category_id=category_id)
+                    return redirect(url_for('categories'))
             else:
-                return render_template('not_found.html', item_no=1)
-        return redirect('/login')
+                return render_template('not_found.html')
+        else:
+            return render_template('not_found.html')
+        return render_template('delete_category.html', user=session['user'], category_id= \
+                category_id, category_name=category_data['category_name'])
+    return redirect(url_for('login'))
 
-class RecipesView(View):
-    """" Display a user's recipes """
+@app.route('/recipes', methods=['GET'])
+def recipes():
+    """ Display a user's recipes """
 
-    methods = ['GET']
-
-    def render_template(self, context):
-        """ Render recipe template """
-        return render_template('recipes.html', **context)
-
-    def dispatch_request(self):
-        if 'logged_in' in session and session['logged_in']:
-            if request.values.get('category_id'):
-                category_id = int(request.values.get('category_id'))
-                category_data = category.get_category(category_id, session['user'][0])
-                if category_data:
-                    recipes = recipe.get_recipes(category_id)
-                    context = {'user': session['user'],
-                               'category': category_data,
-                               'recipes': recipes
-                              }
-                    return self.render_template(context)
-                else:
-                    return render_template('not_found.html', item_no=2)
+    if 'logged_in' in session and session['logged_in']:
+        if request.values.get('category_id'):
+            category_id = int(request.values.get('category_id'))
+            category_data = category.get_category_details(category_id, session['user']['user_id'])
+            if category_data:
+                recipes_data = recipe.get_category_recipes(category_id)
             else:
-                return render_template('not_found.html', item_no=2)
-        return redirect('/login')
+                return render_template('not_found.html')
+        else:
+            return render_template('not_found.html')
+        return render_template('recipes.html', user=session['user'], category=category_data, \
+                recipes=recipes_data)
+    return redirect(url_for('login'))
 
-class CreateRecipeView(View):
+@app.route('/create_recipe', methods=['GET', 'POST'])
+def create_recipe():
     """ Allows a user to add a new recipe """
 
-    methods = ['GET', 'POST']
-
-    def render_template(self, context):
-        """ Render create recipe template """
-        return render_template('create_recipe.html', **context)
-
-    def dispatch_request(self):
-        if 'logged_in' in session and session['logged_in']:
-            if request.values.get('category_id'):
-                category_id = int(request.values.get('category_id'))
-                category_data = category.get_category(category_id, session['user'][0])
-                if category_data:
-                    context = {'user': session['user'],
-                               'category_id': category_id,
-                               'recipe_name': '',
-                               'ingredients': '',
-                               'directions': ''
-                              }
-                    if request.method == 'POST':
-                        recipe_name = request.form['recipe_name']
-                        ingredients = request.form['ingredients']
-                        directions = request.form['directions']
-                        context['recipe_name'] = recipe_name
-                        context['ingredients'] = ingredients
-                        context['directions'] = directions
-                        recipes = recipe.get_recipes(int(category_id))
-                        validation_msgs = []
-                        validation_msgs.append(validators.validate_recipe_name(recipe_name, \
-                                recipes))
-                        validation_msgs.append(validators.validate_ingredients(ingredients))
-                        validation_msgs.append(validators.validate_directions(directions))
-                        for validation_msg in validation_msgs:
-                            if validation_msg != 'Valid':
-                                context['validation_msgs'] = validation_msgs
-                                return self.render_template(context)
-                        recipe.create_recipe(recipe_name, ingredients, directions, \
-                                int(category_id))
-                        return redirect('/recipes?category_id=' + str(category_id))
-                    return self.render_template(context)
-                else:
-                    return render_template('not_found.html', item_no=2)
-        return redirect('/login')
-
-class RecipeDetailsView(View):
-    """" Display specific recipe details """
-
-    methods = ['GET']
-
-    def render_template(self, context):
-        """ Render recipe template """
-        return render_template('recipe_details.html', **context)
-
-    def dispatch_request(self):
-        if 'logged_in' in session and session['logged_in']:
-            if request.values.get('category_id') and request.values.get('recipe_id'):
-                category_id = int(request.values.get('category_id'))
-                recipe_id = int(request.values.get('recipe_id'))
-                recipe_data = recipe.get_recipe(recipe_id, category_id)
-                category_data = category.get_category(category_id, session['user'][0])
-                if recipe_data and category_data:
-                    context = {'user': session['user'],
-                               'recipe': recipe_data,
-                               'category': category_data
-                              }
-                    return self.render_template(context)
-                else:
-                    return render_template('not_found.html', item_no=1)
+    if 'logged_in' in session and session['logged_in']:
+        if request.values.get('category_id'):
+            category_id = int(request.values.get('category_id'))
+            category_data = category.get_category_details(category_id, session['user']['user_id'])
+            if category_data:
+                recipes_data = recipe.get_category_recipes(category_id)
+                form = CreateRecipeForm(category_data, recipes_data)
+                if form.validate_on_submit():
+                    recipe.create_recipe(form.recipe_name.data, form.ingredients.data, \
+                            form.directions.data, int(category_id))
+                    return redirect('/recipes?category_id=' + str(category_id))
             else:
-                return render_template('not_found.html', item_no=1)
-        return redirect('/login')
+                return render_template('not_found.html')
+        else:
+            return render_template('not_found.html')
+        return render_template('create_recipe.html', user=session['user'], category_id= \
+                category_id, form=form)
+    return redirect(url_for('login'))
 
-class UpdateRecipeView(View):
+@app.route('/recipe_details', methods=['GET'])
+def recipe_details():
+    """ Display specific recipe details """
+
+    if 'logged_in' in session and session['logged_in']:
+        if request.values.get('category_id') and request.values.get('recipe_id'):
+            category_id = int(request.values.get('category_id'))
+            recipe_id = int(request.values.get('recipe_id'))
+            recipe_data = recipe.get_recipe_details(recipe_id, category_id)
+            category_data = category.get_category_details(category_id, session['user']['user_id'])
+            if not recipe_data or not category_data:
+                return render_template('not_found.html')
+        else:
+            return render_template('not_found.html')
+        return render_template('recipe_details.html', user=session['user'], category= \
+                category_data, recipe=recipe_data)
+    return redirect(url_for('login'))
+
+@app.route('/update_recipe', methods=['GET', 'POST'])
+def update_recipe():
     """ Allows a user to update an existing recipe """
 
-    methods = ['GET', 'POST']
-
-    def render_template(self, context):
-        """ Render update recipe template """
-        return render_template('update_recipe.html', **context)
-
-    def dispatch_request(self):
-        if 'logged_in' in session and session['logged_in']:
-            if request.values.get('category_id') and request.values.get('recipe_id'):
-                category_id = int(request.values.get('category_id'))
-                recipe_id = int(request.values.get('recipe_id'))
-                recipe_data = recipe.get_recipe(recipe_id, category_id)
-                if recipe_data and category.get_category(category_id, session['user'][0]):
-                    context = {'user': session['user'],
-                               'recipe_id': recipe_data[0],
-                               'category_id': recipe_data[4],
-                               'recipe_name': recipe_data[1],
-                               'ingredients': recipe_data[2],
-                               'directions': recipe_data[3]
-                              }
-                    if request.method == 'POST':
-                        recipe_name = request.form['recipe_name']
-                        ingredients = request.form['ingredients']
-                        directions = request.form['directions']
-                        context['recipe_name'] = recipe_name
-                        context['ingredients'] = ingredients
-                        context['directions'] = directions
-                        recipes = recipe.get_recipes(category_id)
-                        validation_msgs = []
-                        validation_msgs.append(validators.validate_recipe_name(recipe_name, \
-                                recipes, recipe_id))
-                        validation_msgs.append(validators.validate_ingredients(ingredients))
-                        validation_msgs.append(validators.validate_directions(directions))
-                        for validation_msg in validation_msgs:
-                            if validation_msg != 'Valid':
-                                context['validation_msgs'] = validation_msgs
-                                return self.render_template(context)
-                        recipe.update_recipe(recipe_id, recipe_name, ingredients, directions)
-                        return redirect('/recipes?category_id=' + str(category_id))
-                    return self.render_template(context)
-                else:
-                    return render_template('not_found.html', item_no=1)
+    if 'logged_in' in session and session['logged_in']:
+        if request.values.get('category_id') and request.values.get('recipe_id'):
+            category_id = int(request.values.get('category_id'))
+            recipe_id = int(request.values.get('recipe_id'))
+            recipe_data = recipe.get_recipe_details(recipe_id, category_id)
+            recipes_data = recipe.get_category_recipes(category_id)
+            if recipe_data and category.get_category_details(category_id, session['user']['user_id']):
+                form = UpdateRecipeForm(category_id, recipes_data, recipe_data['recipe_id'])
+                if request.method == 'GET':
+                    form = UpdateRecipeForm(category_id, recipes_data, recipe_data['recipe_id'], \
+                            recipe_data['recipe_name'], recipe_data['ingredients'], \
+                            recipe_data['directions'])
+                if form.validate_on_submit():
+                    recipe.update_recipe_details(recipe_id, form.recipe_name.data, \
+                            form.ingredients.data, form.directions.data)
+                    return redirect('/recipes?category_id=' + str(category_id))
             else:
-                return render_template('not_found.html', item_no=1)
-        return redirect('/login')
+                return render_template('not_found.html')
+        else:
+            return render_template('not_found.html')
+        return render_template('update_recipe.html', user=session['user'], category_id= \
+                category_id, recipe_id=recipe_id, form=form)
+    return redirect(url_for('login'))
 
-class DeleteRecipeView(View):
+@app.route('/delete_recipe', methods=['GET', 'POST'])
+def delete_recipe():
     """ Allows a user to delete an existing recipe """
 
-    methods = ['GET', 'POST']
-
-    def render_template(self, context):
-        """ Render delete recipe template """
-        return render_template('delete_recipe.html', **context)
-
-    def dispatch_request(self):
-        if 'logged_in' in session and session['logged_in']:
-            if request.values.get('category_id'):
-                category_id = int(request.values.get('category_id'))
-                recipe_id = int(request.values.get('recipe_id'))
-                recipe_data = recipe.get_recipe(recipe_id, category_id)
-                if recipe_data and category.get_category(category_id, session['user'][0]):
-                    context = {'user': session['user'],
-                               'recipe': recipe_data
-                              }
-                    if request.method == 'POST':
-                        recipe.delete_recipe(recipe_id)
-                        return redirect('/recipes?category_id=' + str(category_id))
-                    return self.render_template(context)
-                else:
-                    return render_template('not_found.html', item_no=1)
+    if 'logged_in' in session and session['logged_in']:
+        if request.values.get('category_id') and request.values.get('recipe_id'):
+            category_id = int(request.values.get('category_id'))
+            recipe_id = int(request.values.get('recipe_id'))
+            recipe_data = recipe.get_recipe_details(recipe_id, category_id)
+            if recipe_data and category.get_category_details(category_id, session['user']['user_id']):
+                if request.method == 'POST':
+                    recipe.delete_recipes(recipe_id=recipe_id)
+                    return redirect('/recipes?category_id=' + str(category_id))
             else:
-                return render_template('not_found.html', item_no=1)
-        return redirect('/login')
+                return render_template('not_found.html')
+        else:
+            return render_template('not_found.html')
+        return render_template('delete_recipe.html', user=session['user'], category_id= \
+                category_id, recipe_id=recipe_id, recipe_name=recipe_data['recipe_name'])
+    return redirect(url_for('login'))
 
-class ProfileView(View):
-    """" Display a user's info """
-
-    methods = ['GET']
-
-    def render_template(self, context):
-        """ Render user profile template """
-        return render_template('profile.html', **context)
-
-    def dispatch_request(self):
-        if 'logged_in' in session and session['logged_in']:
-            context = {'user': session['user']}
-            return self.render_template(context)
-        return redirect('/login')
-
-class LogoutView(View):
+@app.route('/logout', methods=['GET'])
+def logout():
     """ Allows a user to logout """
 
-    def dispatch_request(self):
-        session.clear()
-        return redirect('/')
-
-app.add_url_rule('/', view_func=IndexView.as_view('index'))
-app.add_url_rule('/register', view_func=RegisterView.as_view('register'))
-app.add_url_rule('/login', view_func=LoginView.as_view('login'))
-app.add_url_rule('/home', view_func=CategoriesView.as_view('categories'))
-app.add_url_rule('/create_category', view_func=CreateCategoryView.as_view('create_category'))
-app.add_url_rule('/update_category', view_func=UpdateCategoryView.as_view('update_category'))
-app.add_url_rule('/delete_category', view_func=DeleteCategoryView.as_view('delete_category'))
-app.add_url_rule('/recipes', view_func=RecipesView.as_view('recipes'))
-app.add_url_rule('/create_recipe', view_func=CreateRecipeView.as_view('create_recipe'))
-app.add_url_rule('/recipe_details', view_func=RecipeDetailsView.as_view('recipe_details'))
-app.add_url_rule('/update_recipe', view_func=UpdateRecipeView.as_view('update_recipe'))
-app.add_url_rule('/delete_recipe', view_func=DeleteRecipeView.as_view('delete_recipe'))
-app.add_url_rule('/profile', view_func=ProfileView.as_view('profile'))
-app.add_url_rule('/logout', view_func=LogoutView.as_view('logout'))
+    session.clear()
+    return redirect('/')
 
 app.secret_key = SECRET_KEY
