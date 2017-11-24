@@ -22,21 +22,21 @@
             </div>
         </div>
         <div class="row">
-            {% for category in categories %}
+            {% for category, number_of_recipes in categories %}
             <div class="col s12 m6 l4">
                 <div class="card category-card">
                     <div class="card-content">
-                        <span class="card-title"><strong>{{ category['category_name'] }}</strong></span>
-                        {% if category['number_of_recipes'] == 1 %}
-                        <p>{{ category['number_of_recipes'] }} recipe available</p>
+                        <span class="card-title"><strong>{{ category.category_name }}</strong></span>
+                        {% if number_of_recipes == 1 %}
+                        <p>{{ number_of_recipes }} recipe available</p>
                         {% else %}
-                        <p>{{ category['number_of_recipes'] }} recipes available</p>
+                        <p>{{ number_of_recipes }} recipes available</p>
                         {% endif %}
                     </div>
                     <div class="card-action">
-                        <a href="/recipes?category_id={{ category['category_id'] }}">Recipes</a>
-                        <a href="/update_category?category_id={{ category['category_id'] }}">Edit</a>
-                        <a href="/delete_category?category_id={{ category['category_id'] }}">Delete</a>
+                        <a href="/recipes?category_id={{ category.category_id }}">Recipes</a>
+                        <a href="/update_category?category_id={{ category.category_id }}">Edit</a>
+                        <a href="/delete_category?category_id={{ category.category_id }}">Delete</a>
                     </div>
                 </div>
             </div>

@@ -17,6 +17,9 @@
         {% endfor %}
         {% endif %}
         {% endwith %}
+        {% if form.error %}
+        <div class="center-align red lighten-1"><p>{{ form.error }}</p></div>
+        {% endif %}
         <div class="row form-body">
             <form class="col s12" action="/login" method="post" >
                 {{ form.csrf_token }}
@@ -24,18 +27,12 @@
                     <div class="input-field col s12">
                         {{ form.username }}
                         {{ form.username.label }}
-                        {% for message in form.username.errors %}
-                        <div class="error-msg">{{ message }}</div>
-                        {% endfor %}
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
                         {{ form.password }}
                         {{ form.password.label }}
-                        {% for message in form.password.errors %}
-                        <div class="error-msg">{{ message }}</div>
-                        {% endfor %}
                     </div>
                 </div>
                 <div class="row">

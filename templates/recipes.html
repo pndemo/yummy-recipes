@@ -18,7 +18,7 @@
     <div class="main-container">
         <div class="row">
             <div class="col s12">
-                <div class="title">{{ category['category_name'] }}</div>
+                <div class="title">{{ category.category_name }}</div>
             </div>
         </div>
         {% if recipes %}
@@ -28,7 +28,7 @@
                     {% for recipe in recipes %}
                     <li class="collection-item">
                         <div>
-                            <a href="/recipe_details?category_id={{ category['category_id'] }}&recipe_id={{ recipe['recipe_id'] }}">{{ recipe['recipe_name'] }}</a>
+                            <a href="/recipe_details?category_id={{ category.category_id }}&recipe_id={{ recipe.recipe_id }}">{{ recipe.recipe_name }}</a>
                         </div>
                     </li>
                     {% endfor %}
@@ -43,7 +43,7 @@
         </div>
         {% endif %}
         <div class="fixed-action-btn add">
-            <a href="/create_recipe?category_id={{ category['category_id'] }}" class="btn-floating btn-large waves-effect waves-light red">
+            <a href="/create_recipe?category_id={{ category.category_id }}" class="btn-floating btn-large waves-effect waves-light red">
                 <i class="material-icons">add</i>
             </a>
         </div>
