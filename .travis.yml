@@ -12,3 +12,7 @@ script:
 
 after_sucess:
   - "coveralls"
+<<<<<<< HEAD
+  
+=======
+>>>>>>> f41caffdc59013a9f19c57e439b7314cab684572
