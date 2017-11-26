@@ -7,7 +7,10 @@ install:
   
 script:
   - nosetests
+  - nosetests --with-coverage --cover-package=forms/
+  - nosetests --with-coverage --cover-package=models/
   - nosetests --with-coverage --cover-package=app
+  - nosetests --with-coverage --cover-package=utils
   - coveralls
 
 after_sucess:
