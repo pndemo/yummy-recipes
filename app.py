@@ -107,9 +107,9 @@ def change_password():
             list_index += 1
         if form.validate_on_submit():
             users[list_index] = form.user
-            return redirect(url_for('profile'))
-        return render_template('change_password.html', user=session_user, form=form)
-    return redirect(url_for('login'))
+            return redirect(url_for('profile')), 302
+        return render_template('change_password.html', user=session_user, form=form), 200
+    return redirect(url_for('login')), 302
 
 @app.route('/home', methods=['GET'])
 def categories_display():
@@ -136,9 +136,9 @@ def create_category():
         form = CreateCategoryForm(session_user['user_id'], categories)
         if form.validate_on_submit():
             categories.append(form.category)
-            return redirect(url_for('categories_display'))
-        return render_template('create_category.html', user=session_user, form=form)
-    return redirect(url_for('login'))
+            return redirect(url_for('categories_display')), 302
+        return render_template('create_category.html', user=session_user, form=form), 200
+    return redirect(url_for('login')), 302
 
 @app.route('/update_category', methods=['GET', 'POST'])
 def update_category():
@@ -159,14 +159,14 @@ def update_category():
             if category:
                 if form.validate_on_submit():
                     categories[list_index] = form.category
-                    return redirect(url_for('categories_display'))
+                    return redirect(url_for('categories_display')), 302
             else:
-                return render_template('not_found.html')
+                return render_template('not_found.html'), 200
         else:
-            return render_template('not_found.html')
+            return render_template('not_found.html'), 200
         return render_template('update_category.html', user=session_user, category_id= \
-                category_id, form=form)
-    return redirect(url_for('login'))
+                category_id, form=form), 200
+    return redirect(url_for('login')), 302
 
 @app.route('/delete_category', methods=['GET', 'POST'])
 def delete_category():
@@ -190,14 +190,14 @@ def delete_category():
                             del recipes[recipe_index]
                         recipe_index += 1
                     del categories[list_index]
-                    return redirect(url_for('categories_display'))
+                    return redirect(url_for('categories_display')), 302
             else:
-                return render_template('not_found.html')
+                return render_template('not_found.html'), 200
         else:
-            return render_template('not_found.html')
+            return render_template('not_found.html'), 200
         return render_template('delete_category.html', user=session_user, category_id= \
-                category_id, category_name=category.category_name)
-    return redirect(url_for('login'))
+                category_id, category_name=category.category_name), 200
+    return redirect(url_for('login')), 302
 
 @app.route('/recipes', methods=['GET'])
 def recipes_display():
