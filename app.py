@@ -161,9 +161,9 @@ def update_category():
                     categories[list_index] = form.category
                     return redirect(url_for('categories_display')), 302
             else:
-                return render_template('not_found.html'), 200
+                return render_template('not_found.html'), 404
         else:
-            return render_template('not_found.html'), 200
+            return render_template('not_found.html'), 404
         return render_template('update_category.html', user=session_user, category_id= \
                 category_id, form=form), 200
     return redirect(url_for('login')), 302
@@ -192,9 +192,9 @@ def delete_category():
                     del categories[list_index]
                     return redirect(url_for('categories_display')), 302
             else:
-                return render_template('not_found.html'), 200
+                return render_template('not_found.html'), 404
         else:
-            return render_template('not_found.html'), 200
+            return render_template('not_found.html'), 404
         return render_template('delete_category.html', user=session_user, category_id= \
                 category_id, category_name=category.category_name), 200
     return redirect(url_for('login')), 302
@@ -217,12 +217,12 @@ def recipes_display():
                     if recipe.category_id == category_id:
                         recipes_list.append(recipe)
             else:
-                return render_template('not_found.html')
+                return render_template('not_found.html'), 404
         else:
-            return render_template('not_found.html')
+            return render_template('not_found.html'), 404
         return render_template('recipes.html', user=session_user, category=category, \
-                recipes=recipes_list)
-    return redirect(url_for('login'))
+                recipes=recipes_list), 200
+    return redirect(url_for('login')), 302
 
 @app.route('/create_recipe', methods=['GET', 'POST'])
 def create_recipe():
@@ -240,14 +240,14 @@ def create_recipe():
                 form = CreateRecipeForm(category_id, recipes)
                 if form.validate_on_submit():
                     recipes.append(form.recipe)
-                    return redirect('/recipes?category_id=' + str(category_id))
+                    return redirect('/recipes?category_id=' + str(category_id)), 302
             else:
-                return render_template('not_found.html')
+                return render_template('not_found.html'), 404
         else:
-            return render_template('not_found.html')
+            return render_template('not_found.html'), 404
         return render_template('create_recipe.html', user=session_user, category_id= \
-                category_id, form=form)
-    return redirect(url_for('login'))
+                category_id, form=form), 200
+    return redirect(url_for('login')), 302
 
 @app.route('/recipe_details', methods=['GET'])
 def recipe_details():
@@ -268,14 +268,14 @@ def recipe_details():
                     if recipe.category_id == category_id and recipe.recipe_id == recipe_id:
                         break
                 if not recipe:
-                    return render_template('not_found.html')
+                    return render_template('not_found.html'), 404
             else:
-                return render_template('not_found.html')
+                return render_template('not_found.html'), 404
         else:
-            return render_template('not_found.html')
+            return render_template('not_found.html'), 404
         return render_template('recipe_details.html', user=session_user, category= \
-                category, recipe=recipe)
-    return redirect(url_for('login'))
+                category, recipe=recipe), 200
+    return redirect(url_for('login')), 302
 
 @app.route('/update_recipe', methods=['GET', 'POST'])
 def update_recipe():
@@ -302,16 +302,16 @@ def update_recipe():
                 if recipe:
                     if form.validate_on_submit():
                         recipes[list_index] = form.recipe
-                        return redirect('/recipes?category_id=' + str(category_id))
+                        return redirect('/recipes?category_id=' + str(category_id)), 302
                 else:
-                    return render_template('not_found.html')
+                    return render_template('not_found.html'), 404
             else:
-                render_template('not_found.html')
+                return render_template('not_found.html'), 404
         else:
-            return render_template('not_found.html')
+            return render_template('not_found.html'), 404
         return render_template('update_recipe.html', user=session_user, category_id= \
-                category_id, recipe_id=recipe_id, form=form)
-    return redirect(url_for('login'))
+                category_id, recipe_id=recipe_id, form=form), 200
+    return redirect(url_for('login')), 302
 
 @app.route('/delete_recipe', methods=['GET', 'POST'])
 def delete_recipe():
@@ -336,16 +336,16 @@ def delete_recipe():
                 if recipe:
                     if request.method == 'POST':
                         del recipes[list_index]
-                        return redirect('/recipes?category_id=' + str(category_id))
+                        return redirect('/recipes?category_id=' + str(category_id)), 302
                 else:
-                    return render_template('not_found.html')
+                    return render_template('not_found.html'), 404
             else:
-                render_template('not_found.html')
+                return render_template('not_found.html'), 404
         else:
-            return render_template('not_found.html')
+            return render_template('not_found.html'), 404
         return render_template('delete_recipe.html', user=session_user, category_id= \
-                category_id, recipe_id=recipe_id, recipe_name=recipe.recipe_name)
-    return redirect(url_for('login'))
+                category_id, recipe_id=recipe_id, recipe_name=recipe.recipe_name), 200
+    return redirect(url_for('login')), 302
 
 @app.route('/logout', methods=['GET'])
 def logout():
