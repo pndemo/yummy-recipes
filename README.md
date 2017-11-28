@@ -8,6 +8,9 @@
 <a href="https://coveralls.io/github/pndemo/yummy-recipes">
 <img class="notice-badge" src="https://coveralls.io/repos/github/pndemo/yummy-recipes/badge.svg?branch=develop" alt="Badge"/>
 </a>
+<a href="https://www.python.org/dev/peps/pep-0008/">
+<img class="notice-badge" src="https://img.shields.io/badge/code%20style-pep8-orange.svg" alt="Badge"/>
+</a>
 <a href="https://github.com/pndemo/yummy-recipes/blob/develop/Licence.md">
 <img class="notice-badge" src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="Badge"/>
 </a>
