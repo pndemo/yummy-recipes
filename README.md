@@ -1,9 +1,15 @@
 <h1>Yummy Recipes</h1>
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1512eaed87c44b8794ca3aae2154c76b)](https://www.codacy.com/app/pndemo/yummy-recipes?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=pndemo/yummy-recipes&amp;utm_campaign=Badge_Grade)
+
 <a href="https://travis-ci.org/pndemo/yummy-recipes">
 <img class="notice-badge" src="https://travis-ci.org/pndemo/yummy-recipes.svg?branch=develop" alt="Badge"/>
 </a>
 <a href="https://coveralls.io/github/pndemo/yummy-recipes">
 <img class="notice-badge" src="https://coveralls.io/repos/github/pndemo/yummy-recipes/badge.svg?branch=develop" alt="Badge"/>
+</a>
+<a href="https://github.com/pndemo/yummy-recipes/blob/develop/Licence.md">
+<img class="notice-badge" src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="Badge"/>
 </a>
 <br/>
 <h2>About Yummy Recipes</h2>
