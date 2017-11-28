@@ -7,9 +7,10 @@
 </a>
 <br/>
 <h2>About Yummy Recipes</h2>
+<p>
 Yummy Recipes app provides a platform for users to keep track of their awesome recipes and share with others if they so wish.
 The Yummy Recipes app has been beautifully designed with a number of functionalities that include: creation of new user accounts, user login, profile update, password change, creation of new recipe categories, viewing of recipe categories, updating of recipe categories, deletion of recipe categories, creation of new recipes, viewing of recipes, updating of recipes and deletion of recipes.
-<br/>
+</p>
 <h2>Installation</h2>
 <ol>
   <li>Install Python (preferably, version >= 3.5).</li>
@@ -58,12 +59,10 @@ GET/POST update_recipe?recipe_id=<>  | Update a recipe given recipe_id | PRIVATE
 GET/POST delete_recipe?recipe_id=<>  | Delete a recipe given recipe_id | PRIVATE
 
 <h2>Demo App</h2>
-The demo app of the Yummy Recipes app can be accessed using the link below.
-<ul>
-<li><a href="https://sandbx.herokuapp.com/">https://sandbx.herokuapp.com/</a></li>
-</ul>
+<p>The demo app of the Yummy Recipes app can be accessed using the link below.</p>
+<p><a href="https://sandbx.herokuapp.com/">https://sandbx.herokuapp.com/</p>
 <h2>Testing</h2>
-Testing has been implemented using the unit testing framework of the Python language. To run tests, use the following command:
+<p>Testing has been implemented using the unit testing framework of the Python language. To run tests, use the following command:</p>
 <p><code>$ nosetests</code></p>
-<h2>Testing</h2>
-This app is licensed under the MIT license.
+<h2>Licensing</h2>
+<p>This app is licensed under the MIT license.</p>
