@@ -136,7 +136,7 @@ class CategoryTests(unittest.TestCase):
         self.assertEqual(response.status_code, 302)
         response = self.client().post('/create_category', data=self.category_data)
         self.assertEqual(response.status_code, 302)
-        response = self.client().post('/delete_category?category_id=1', data=self.category_data)
+        response = self.client().post('/delete_category?category_id=1')
         self.assertEqual(response.status_code, 302)
 
 if __name__ == '__main__':
