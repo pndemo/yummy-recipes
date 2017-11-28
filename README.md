@@ -1,30 +1,69 @@
 <h1>Yummy Recipes</h1>
 <a href="https://travis-ci.org/pndemo/yummy-recipes">
-<img class="notice-badge" src="https://travis-ci.org/pndemo/yummy-recipes.svg?branch=master" alt="Badge"/>
+<img class="notice-badge" src="https://travis-ci.org/pndemo/yummy-recipes.svg?branch=develop" alt="Badge"/>
 </a>
 <a href="https://coveralls.io/github/pndemo/yummy-recipes">
-<img class="notice-badge" src="https://coveralls.io/repos/github/pndemo/yummy-recipes/badge.svg?branch=master" alt="Badge"/>
+<img class="notice-badge" src="https://coveralls.io/repos/github/pndemo/yummy-recipes/badge.svg?branch=develop" alt="Badge"/>
 </a>
 <br/>
-<h4>About Yummy Recipes</h4>
+<h2>About Yummy Recipes</h2>
 Yummy Recipes app provides a platform for users to keep track of their awesome recipes and share with others if they so wish.
-The Yummy Recipes app has been beautifully designed with a number of functionalities that include: creation of new user accounts, user login, creation of new recipe categories, viewing of recipe categories, updating of recipe categories, deletion of recipe categories, creation of new recipes, viewing of recipes, updating of recipes and deletion of recipes.
-<h4>UI Templates</h4>
-The UI templates of this app have been hosted on GitHub Pages and can be viewed by visiting the links below:
+The Yummy Recipes app has been beautifully designed with a number of functionalities that include: creation of new user accounts, user login, profile update, password change, creation of new recipe categories, viewing of recipe categories, updating of recipe categories, deletion of recipe categories, creation of new recipes, viewing of recipes, updating of recipes and deletion of recipes.
+<br/>
+<h2>Installation</h2>
+<ol>
+  <li>Install Python (preferably, version >= 3.5).</li>
+  <li>Clone Yummy Recipes from GitHub to your local machine.</li>
+  <p><code>$ git clone https://github.com/pndemo/yummy-recipes.git</code></p>
+  <li>Change directory to yummy-recipes</li>
+  <p><code>$ cd yummy-recipes</code></p>
+  <li>Create virtual environment</li>
+  <p><code>$ virtualenv venv</code></p>
+  <li>Activate virtual environment</li>
+  <p><code>$ source venv/bin/activate</code></p>
+  <li>Install application requirements in virtual environment</li>
+  <p><code>$ pip install -r requirements.txt</code></p>
+  <li>Run the application</li>
+  <p><code>$ export FLASK_APP=app.py</code></p>
+  <p><code>$ flask run</code></p>
+</ol>
+<h2>Endpoints</h2>
+1) Auth module
+
+Endpoint | Functionality| Access
+------------ | ------------- | ------------- 
+GET/POST register | Create a new user account | PUBLIC
+GET/POST /login | Login registered user | PUBLIC
+GET profile | Display user's account details | PRIVATE
+GET/POST edit_profile | Change user's profile details | PRIVATE
+GET/POST change_password | Change user's password | PRIVATE
+
+2) Category module
+
+Endpoint | Functionality| Access
+------------ | ------------- | ------------- 
+GET categories | Display logged in user's categories | PRIVATE
+GET/POST create_category | Create a new category | PRIVATE
+GET/POST update_category?category_id=<> | Update a category given category_id | PRIVATE
+GET/POST delete_category?category_id=<>  | Delete a category given category_id | PRIVATE
+
+3) Recipe module
+
+Endpoint | Functionality| Access
+------------ | ------------- | ------------- 
+GET recipes?category_id=<> | Display recipes given category_id | PRIVATE
+GET/POST create_recipe?category_id=<> | Create a new recipe given category_id | PRIVATE
+GET/POST recipe_details?recipe_id=<> | Display a recipe given recipe_id | PRIVATE
+GET/POST update_recipe?recipe_id=<>  | Update a recipe given recipe_id | PRIVATE
+GET/POST delete_recipe?recipe_id=<>  | Delete a recipe given recipe_id | PRIVATE
+
+<h2>Demo App</h2>
+The demo app of the Yummy Recipes app can be accessed using the link below.
 <ul>
-<li><a href="https://pndemo.github.io/yummy-recipes/designs/UI/register.html">Create an account<a></li>
-<li><a href="https://pndemo.github.io/yummy-recipes/designs/UI/login.html">Login<a></li>
-<li><a href="https://pndemo.github.io/yummy-recipes/designs/UI/create_recipe_category.html">Create New Recipe Category<a></li>
-<li><a href="https://pndemo.github.io/yummy-recipes/designs/UI/recipe_categories.html">View Recipe Categories<a></li>
-<li><a href="https://pndemo.github.io/yummy-recipes/designs/UI/update_recipe_category.html">Update Recipe Category<a></li>
-<li><a href="https://pndemo.github.io/yummy-recipes/designs/UI/delete_recipe_category.html">Delete Recipe Category<a></li>
-<li><a href="https://pndemo.github.io/yummy-recipes/designs/UI/create_recipe.html">Create New Recipe<a></li>
-<li><a href="https://pndemo.github.io/yummy-recipes/designs/UI/recipes.html">View Recipes<a></li>
-<li><a href="https://pndemo.github.io/yummy-recipes/designs/UI/update_recipe.html">Update Recipe<a></li>
-<li><a href="https://pndemo.github.io/yummy-recipes/designs/UI/delete_recipe.html">Delete Recipe<a></li>
+<li><a href="https://sandbx.herokuapp.com/">https://sandbx.herokuapp.com/</a></li>
 </ul>
-<h4>Hosted App</h4>
-Yummy Recipes has been hosted on Heroku.
-<ul>
-<li><a href="https://serene-lake-56724.herokuapp.com/">Try it out</a></li>
-</ul>
+<h2>Testing</h2>
+Testing has been implemented using the unit testing framework of the Python language. To run tests, use the following command:
+<p><code>$ nosetests</code></p>
+<h2>Testing</h2>
+This app is licensed under the MIT license.
