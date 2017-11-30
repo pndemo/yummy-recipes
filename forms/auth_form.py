@@ -106,7 +106,6 @@ class ChangePasswordForm(FlaskForm):
         FlaskForm.__init__(self, *args, **kwargs)
         self.user = user
         if request_method == 'POST':
-            self.password = self.user.password
             self.user.password = self.new_password.data
 
     def validate_password(self, field):
