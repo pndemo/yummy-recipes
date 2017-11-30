@@ -1,1 +1,1 @@
-web: waitress-serve --port 5000 server:app
+web: waitress-serve --threads=8 --port 5000 run:app
