@@ -85,6 +85,17 @@ class RecipeTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'A recipe with this recipe name is already available', response.data)
 
+    def test_create_non_existent_category(self):
+        """ Test for unsuccessful recipe creation with non existent category """
+        response = self.client().post('/register', data=self.register_data)
+        self.assertEqual(response.status_code, 302)
+        response = self.client().post('/login', data=self.login_data)
+        self.assertEqual(response.status_code, 302)
+        response = self.client().get('/create_recipe')
+        self.assertEqual(response.status_code, 404)
+        response = self.client().get('/create_recipe?category_id=1')
+        self.assertEqual(response.status_code, 404)
+
     def test_get_recipes(self):
         """ Test for display of created recipes """
         response = self.client().post('/register', data=self.register_data)
@@ -98,6 +109,42 @@ class RecipeTests(unittest.TestCase):
         response = self.client().get('/recipes?category_id=1')
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'Espresso Esiri', response.data)
+        response = self.client().get('/recipes')
+        self.assertEqual(response.status_code, 404)
+        response = self.client().get('/recipes?category_id=20')
+        self.assertEqual(response.status_code, 404)
+
+    def test_get_specific_recipe(self):
+        """ Test for display of specific created recipe """
+        response = self.client().post('/register', data=self.register_data)
+        self.assertEqual(response.status_code, 302)
+        response = self.client().post('/login', data=self.login_data)
+        self.assertEqual(response.status_code, 302)
+        response = self.client().post('/create_category', data=self.category_data)
+        self.assertEqual(response.status_code, 302)
+        response = self.client().post('/create_recipe?category_id=1', data=self.recipe_data)
+        self.assertEqual(response.status_code, 302)
+        response = self.client().get('/recipe_details?category_id=1&recipe_id=1')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Espresso Esiri', response.data)
+        response = self.client().get('/recipe_details')
+        self.assertEqual(response.status_code, 404)
+        response = self.client().get('/recipe_details?category_id=2&recipe_id=1')
+        self.assertEqual(response.status_code, 404)
+        response = self.client().get('/recipe_details?category_id=1&recipe_id=2')
+        self.assertEqual(response.status_code, 404)
+
+    def test_get_categories(self):
+        """ Test for display of created categories """
+        response = self.client().post('/register', data=self.register_data)
+        self.assertEqual(response.status_code, 302)
+        response = self.client().post('/login', data=self.login_data)
+        self.assertEqual(response.status_code, 302)
+        response = self.client().post('/create_category', data=self.category_data)
+        self.assertEqual(response.status_code, 302)
+        response = self.client().get('/home')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Breakfast', response.data)
 
     def test_update_successful(self):
         """ Test for successful recipe update """
@@ -109,6 +156,8 @@ class RecipeTests(unittest.TestCase):
         self.assertEqual(response.status_code, 302)
         response = self.client().post('/create_recipe?category_id=1', data=self.recipe_data)
         self.assertEqual(response.status_code, 302)
+        response = self.client().get('/update_recipe?category_id=1&recipe_id=1')
+        self.assertEqual(response.status_code, 200)
         self.recipe_data['recipe_name'] = 'Espresso Classic'
         self.recipe_data['ingredients'] = '1) 2 tbsp (30 ml) Espresso, 2) 2 tbsp (30 ml) \
                 Benedictine, 3) Approx. 3 tbsp (40 ml) fresh heavy cream, 4) Ice cubes'
@@ -177,6 +226,21 @@ class RecipeTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'A recipe with this recipe name is already available', response.data)
 
+    def test_update_non_existent_recipe(self):
+        """ Test for unsuccessful recipe update with non existent category / recipe """
+        response = self.client().post('/register', data=self.register_data)
+        self.assertEqual(response.status_code, 302)
+        response = self.client().post('/login', data=self.login_data)
+        self.assertEqual(response.status_code, 302)
+        response = self.client().get('/update_recipe')
+        self.assertEqual(response.status_code, 404)
+        response = self.client().get('/update_recipe?category_id=1&recipe_id=1')
+        self.assertEqual(response.status_code, 404)
+        response = self.client().post('/create_category', data=self.category_data)
+        self.assertEqual(response.status_code, 302)
+        response = self.client().get('/update_recipe?category_id=1&recipe_id=2')
+        self.assertEqual(response.status_code, 404)
+
     def test_delete_recipe(self):
         """ Test for successful recipe deletion """
         response = self.client().post('/register', data=self.register_data)
@@ -187,7 +251,38 @@ class RecipeTests(unittest.TestCase):
         self.assertEqual(response.status_code, 302)
         response = self.client().post('/create_recipe?category_id=1', data=self.recipe_data)
         self.assertEqual(response.status_code, 302)
-        response = self.client().post('/delete_recipe?category_id=1&recipe_id=1')
+        self.recipe_data['recipe_name'] = 'Espresso Classic'
+        response = self.client().post('/create_recipe?category_id=1', data=self.recipe_data)
+        self.assertEqual(response.status_code, 302)
+        response = self.client().post('/delete_recipe?category_id=1&recipe_id=2')
+        self.assertEqual(response.status_code, 302)
+
+    def test_delete_non_existent_recipe(self):
+        """ Test for unsuccessful recipe deletion with non existent category / recipe """
+        response = self.client().post('/register', data=self.register_data)
+        self.assertEqual(response.status_code, 302)
+        response = self.client().post('/login', data=self.login_data)
+        self.assertEqual(response.status_code, 302)
+        response = self.client().get('/delete_recipe')
+        self.assertEqual(response.status_code, 404)
+        response = self.client().get('/delete_recipe?category_id=1&recipe_id=1')
+        self.assertEqual(response.status_code, 404)
+        response = self.client().post('/create_category', data=self.category_data)
+        self.assertEqual(response.status_code, 302)
+        response = self.client().get('/delete_recipe?category_id=1&recipe_id=2')
+        self.assertEqual(response.status_code, 404)
+
+    def test_delete_category(self):
+        """ Test for successful category deletion """
+        response = self.client().post('/register', data=self.register_data)
+        self.assertEqual(response.status_code, 302)
+        response = self.client().post('/login', data=self.login_data)
+        self.assertEqual(response.status_code, 302)
+        response = self.client().post('/create_category', data=self.category_data)
+        self.assertEqual(response.status_code, 302)
+        response = self.client().post('/create_recipe?category_id=1', data=self.recipe_data)
+        self.assertEqual(response.status_code, 302)
+        response = self.client().post('/delete_category?category_id=1')
         self.assertEqual(response.status_code, 302)
 
 if __name__ == '__main__':
