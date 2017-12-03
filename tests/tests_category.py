@@ -82,6 +82,8 @@ class CategoryTests(unittest.TestCase):
         self.assertEqual(response.status_code, 302)
         response = self.client().post('/create_category', data=self.category_data)
         self.assertEqual(response.status_code, 302)
+        response = self.client().get('/update_category?category_id=1')
+        self.assertEqual(response.status_code, 200)
         self.category_data['category_name'] = 'Breakfast2'
         response = self.client().post('/update_category?category_id=1', data=self.category_data)
         self.assertEqual(response.status_code, 302)
@@ -128,6 +130,21 @@ class CategoryTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'A category with this category name is already available', response.data)
 
+    def test_update_non_existent_category(self):
+        """ Test for unsuccessful category update with non existent category """
+        response = self.client().post('/register', data=self.register_data)
+        self.assertEqual(response.status_code, 302)
+        response = self.client().post('/login', data=self.login_data)
+        self.assertEqual(response.status_code, 302)
+        response = self.client().get('/update_category')
+        self.assertEqual(response.status_code, 404)
+        response = self.client().get('/update_category?category_id=1')
+        self.assertEqual(response.status_code, 404)
+        response = self.client().get('/delete_category')
+        self.assertEqual(response.status_code, 404)
+        response = self.client().get('/delete_category?category_id=1')
+        self.assertEqual(response.status_code, 404)
+
     def test_delete_category(self):
         """ Test for successful category deletion """
         response = self.client().post('/register', data=self.register_data)
@@ -136,8 +153,22 @@ class CategoryTests(unittest.TestCase):
         self.assertEqual(response.status_code, 302)
         response = self.client().post('/create_category', data=self.category_data)
         self.assertEqual(response.status_code, 302)
-        response = self.client().post('/delete_category?category_id=1')
+        self.category_data['category_name'] = 'Breakfast2'
+        response = self.client().post('/create_category', data=self.category_data)
         self.assertEqual(response.status_code, 302)
+        response = self.client().post('/delete_category?category_id=2')
+        self.assertEqual(response.status_code, 302)
+
+    def test_delete_non_existent_category(self):
+        """ Test for unsuccessful category deletion with non existent category """
+        response = self.client().post('/register', data=self.register_data)
+        self.assertEqual(response.status_code, 302)
+        response = self.client().post('/login', data=self.login_data)
+        self.assertEqual(response.status_code, 302)
+        response = self.client().get('/delete_category')
+        self.assertEqual(response.status_code, 404)
+        response = self.client().get('/delete_category?category_id=1')
+        self.assertEqual(response.status_code, 404)
 
 if __name__ == '__main__':
     unittest.main()
