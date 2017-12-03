@@ -130,17 +130,71 @@ alphanumeric and underscore characters', response.data)
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'Invalid email address/password', response.data)
 
-    def test_access_protected_page(self):
-        """ Test for unsuccessful access to protected page (when not logged in) """
+    def test_access_protected_pages(self):
+        """ Test for unsuccessful access to protected pages (when not logged in) """
         response = self.client().get('/profile')
         self.assertEqual(response.status_code, 302)
+        response = self.client().get('/edit_profile')
+        self.assertEqual(response.status_code, 302)
+        response = self.client().get('/change_password')
+        self.assertEqual(response.status_code, 302)
+        response = self.client().get('/home')
+        self.assertEqual(response.status_code, 302)
+        response = self.client().get('/create_category')
+        self.assertEqual(response.status_code, 302)
+        response = self.client().get('/update_category?category_id=1')
+        self.assertEqual(response.status_code, 302)
+        response = self.client().get('/delete_category?category_id=1')
+        self.assertEqual(response.status_code, 302)
+        response = self.client().get('/recipes?category_id=1')
+        self.assertEqual(response.status_code, 302)
+        response = self.client().get('/create_recipe?category_id=1')
+        self.assertEqual(response.status_code, 302)
+        response = self.client().get('/recipe_details?category_id=1&recipe_id=1')
+        self.assertEqual(response.status_code, 302)
+        response = self.client().get('/update_recipe?category_id=1&recipe_id=1')
+        self.assertEqual(response.status_code, 302)
+        response = self.client().get('/delete_recipe?category_id=1&recipe_id=1')
+        self.assertEqual(response.status_code, 302)
+
+    def test_access_anonymous_pages(self):
+        """ Test for unsuccessful access to anonymous pages (when logged in) """
+        response = self.client().post('/register', data=self.register_data)
+        self.assertEqual(response.status_code, 302)
+        response = self.client().post('/login', data=self.login_data)
+        self.assertEqual(response.status_code, 302)
+        response = self.client().get('/')
+        self.assertEqual(response.status_code, 302)
+        response = self.client().get('/register')
+        self.assertEqual(response.status_code, 302)
+        response = self.client().get('/login')
+        self.assertEqual(response.status_code, 302)
+
+    def test_display_profile_info(self):
+        """ Test for display of profile info """
+        response = self.client().post('/register', data=self.register_data)
+        self.assertEqual(response.status_code, 302)
+        response = self.client().post('/login', data=self.login_data)
+        self.assertEqual(response.status_code, 302)
+        response = self.client().get('/profile')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Profile', response.data)
+        self.assertIn(b'Username', response.data)
+        self.assertIn(b'Email address', response.data)
 
     def test_edit_profile_successful(self):
         """ Test for successful profile edit """
         response = self.client().post('/register', data=self.register_data)
         self.assertEqual(response.status_code, 302)
+        self.register_data['username'] = 'ExampleUser2'
+        self.register_data['email'] = 'example2@domain.com'
+        response = self.client().post('/register', data=self.register_data)
+        self.assertEqual(response.status_code, 302)
+        self.login_data['username'] = 'ExampleUser2'
         response = self.client().post('/login', data=self.login_data)
         self.assertEqual(response.status_code, 302)
+        response = self.client().get('/edit_profile')
+        self.assertEqual(response.status_code, 200)
         response = self.client().post('/edit_profile', data=self.edit_profile_data)
         self.assertEqual(response.status_code, 302)
 
@@ -184,6 +238,11 @@ alphanumeric and underscore characters', response.data)
         """ Test for successful password change """
         response = self.client().post('/register', data=self.register_data)
         self.assertEqual(response.status_code, 302)
+        self.register_data['username'] = 'ExampleUser2'
+        self.register_data['email'] = 'example2@domain.com'
+        response = self.client().post('/register', data=self.register_data)
+        self.assertEqual(response.status_code, 302)
+        self.login_data['username'] = 'ExampleUser2'
         response = self.client().post('/login', data=self.login_data)
         self.assertEqual(response.status_code, 302)
         response = self.client().post('/change_password', data=self.change_password_data)
@@ -195,10 +254,12 @@ alphanumeric and underscore characters', response.data)
         self.assertEqual(response.status_code, 302)
         response = self.client().post('/login', data=self.login_data)
         self.assertEqual(response.status_code, 302)
+        self.change_password_data['password'] = ''
         self.change_password_data['new_password'] = ''
         self.change_password_data['confirm_new_password'] = ''
         response = self.client().post('/change_password', data=self.change_password_data)
         self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Please enter current password', response.data)
         self.assertIn(b'Please enter password', response.data)
         self.assertIn(b'Please confirm your password', response.data)
 

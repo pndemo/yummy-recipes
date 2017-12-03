@@ -32,7 +32,7 @@ def register():
     """ Allows a user to create a new account """
 
     if logged_in:
-        return redirect('/home')
+        return redirect('/home'), 302
     else:
         form = RegisterForm(users)
         if form.validate_on_submit():
@@ -47,7 +47,7 @@ def login():
 
     global logged_in
     if logged_in:
-        return redirect('/home')
+        return redirect('/home'), 302
     else:
         form = LoginForm(users, request.method)
         if form.validate_on_submit():
@@ -120,8 +120,8 @@ def categories_display():
         for category in categories:
             if category.user_id == session_user['user_id']:
                 number_of_recipes = 0
-                for recipex in recipes:
-                    if recipex.category_id == category.category_id:
+                for recipe in recipes:
+                    if recipe.category_id == category.category_id:
                         number_of_recipes += 1
                 categories_list.append((category, number_of_recipes))
         return render_template('categories.html', user=session_user, categories= \
@@ -155,15 +155,17 @@ def update_category():
                     category.categories = categories
                     form = UpdateCategoryForm(category, request.method)
                     break
+                else:
+                    category = None
                 list_index += 1
             if category:
                 if form.validate_on_submit():
                     categories[list_index] = form.category
                     return redirect(url_for('categories_display')), 302
             else:
-                return render_template('not_found.html'), 404
+                return render_template('not_found.html', user=session_user), 404
         else:
-            return render_template('not_found.html'), 404
+            return render_template('not_found.html', user=session_user), 404
         return render_template('update_category.html', user=session_user, category_id= \
                 category_id, form=form), 200
     return redirect(url_for('login')), 302
@@ -181,6 +183,8 @@ def delete_category():
                 if category.user_id == session_user['user_id'] and category.category_id == \
                         category_id:
                     break
+                else:
+                    category = None
                 list_index += 1
             if category:
                 if request.method == 'POST':
@@ -192,9 +196,9 @@ def delete_category():
                     del categories[list_index]
                     return redirect(url_for('categories_display')), 302
             else:
-                return render_template('not_found.html'), 404
+                return render_template('not_found.html', user=session_user), 404
         else:
-            return render_template('not_found.html'), 404
+            return render_template('not_found.html', user=session_user), 404
         return render_template('delete_category.html', user=session_user, category_id= \
                 category_id, category_name=category.category_name), 200
     return redirect(url_for('login')), 302
@@ -211,15 +215,17 @@ def recipes_display():
                 if category.user_id == session_user['user_id'] and category.category_id == \
                         category_id:
                     break
+                else:
+                    category = None
             if category:
                 recipes_list = []
                 for recipe in recipes:
                     if recipe.category_id == category_id:
                         recipes_list.append(recipe)
             else:
-                return render_template('not_found.html'), 404
+                return render_template('not_found.html', user=session_user), 404
         else:
-            return render_template('not_found.html'), 404
+            return render_template('not_found.html', user=session_user), 404
         return render_template('recipes.html', user=session_user, category=category, \
                 recipes=recipes_list), 200
     return redirect(url_for('login')), 302
@@ -236,15 +242,17 @@ def create_recipe():
                 if category.user_id == session_user['user_id'] and category.category_id == \
                         category_id:
                     break
+                else:
+                    category = None
             if category:
                 form = CreateRecipeForm(category_id, recipes)
                 if form.validate_on_submit():
                     recipes.append(form.recipe)
                     return redirect('/recipes?category_id=' + str(category_id)), 302
             else:
-                return render_template('not_found.html'), 404
+                return render_template('not_found.html', user=session_user), 404
         else:
-            return render_template('not_found.html'), 404
+            return render_template('not_found.html', user=session_user), 404
         return render_template('create_recipe.html', user=session_user, category_id= \
                 category_id, form=form), 200
     return redirect(url_for('login')), 302
@@ -262,17 +270,21 @@ def recipe_details():
                 if category.user_id == session_user['user_id'] and category.category_id == \
                         category_id:
                     break
+                else:
+                    category = None
             if category:
                 recipe = None
                 for recipe in recipes:
                     if recipe.category_id == category_id and recipe.recipe_id == recipe_id:
                         break
+                    else:
+                        recipe = None
                 if not recipe:
-                    return render_template('not_found.html'), 404
+                    return render_template('not_found.html', user=session_user), 404
             else:
-                return render_template('not_found.html'), 404
+                return render_template('not_found.html', user=session_user), 404
         else:
-            return render_template('not_found.html'), 404
+            return render_template('not_found.html', user=session_user), 404
         return render_template('recipe_details.html', user=session_user, category= \
                 category, recipe=recipe), 200
     return redirect(url_for('login')), 302
@@ -290,6 +302,8 @@ def update_recipe():
                 if category.user_id == session_user['user_id'] and category.category_id == \
                         category_id:
                     break
+                else:
+                    category = None
             if category:
                 recipe = None
                 list_index = 0
@@ -298,17 +312,19 @@ def update_recipe():
                         recipe.recipes = recipes
                         form = UpdateRecipeForm(recipe, request.method)
                         break
+                    else:
+                        recipe = None
                     list_index += 1
                 if recipe:
                     if form.validate_on_submit():
                         recipes[list_index] = form.recipe
                         return redirect('/recipes?category_id=' + str(category_id)), 302
                 else:
-                    return render_template('not_found.html'), 404
+                    return render_template('not_found.html', user=session_user), 404
             else:
-                return render_template('not_found.html'), 404
+                return render_template('not_found.html', user=session_user), 404
         else:
-            return render_template('not_found.html'), 404
+            return render_template('not_found.html', user=session_user), 404
         return render_template('update_recipe.html', user=session_user, category_id= \
                 category_id, recipe_id=recipe_id, form=form), 200
     return redirect(url_for('login')), 302
@@ -326,23 +342,27 @@ def delete_recipe():
                 if category.user_id == session_user['user_id'] and category.category_id == \
                         category_id:
                     break
+                else:
+                    category = None
             if category:
                 recipe = None
                 list_index = 0
                 for recipe in recipes:
                     if recipe.category_id == category_id and recipe.recipe_id == recipe_id:
                         break
+                    else:
+                        recipe = None
                     list_index += 1
                 if recipe:
                     if request.method == 'POST':
                         del recipes[list_index]
                         return redirect('/recipes?category_id=' + str(category_id)), 302
                 else:
-                    return render_template('not_found.html'), 404
+                    return render_template('not_found.html', user=session_user), 404
             else:
-                return render_template('not_found.html'), 404
+                return render_template('not_found.html', user=session_user), 404
         else:
-            return render_template('not_found.html'), 404
+            return render_template('not_found.html', user=session_user), 404
         return render_template('delete_recipe.html', user=session_user, category_id= \
                 category_id, recipe_id=recipe_id, recipe_name=recipe.recipe_name), 200
     return redirect(url_for('login')), 302
