@@ -156,6 +156,8 @@ class CategoryTests(unittest.TestCase):
         self.category_data['category_name'] = 'Breakfast2'
         response = self.client().post('/create_category', data=self.category_data)
         self.assertEqual(response.status_code, 302)
+        response = self.client().get('/delete_category?category_id=2')
+        self.assertEqual(response.status_code, 200)
         response = self.client().post('/delete_category?category_id=2')
         self.assertEqual(response.status_code, 302)
 

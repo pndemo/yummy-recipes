@@ -95,6 +95,10 @@ class RecipeTests(unittest.TestCase):
         self.assertEqual(response.status_code, 404)
         response = self.client().get('/create_recipe?category_id=1')
         self.assertEqual(response.status_code, 404)
+        response = self.client().post('/create_category', data=self.category_data)
+        self.assertEqual(response.status_code, 302)
+        response = self.client().get('/create_recipe?category_id=2')
+        self.assertEqual(response.status_code, 404)
 
     def test_get_recipes(self):
         """ Test for display of created recipes """
@@ -141,6 +145,8 @@ class RecipeTests(unittest.TestCase):
         response = self.client().post('/login', data=self.login_data)
         self.assertEqual(response.status_code, 302)
         response = self.client().post('/create_category', data=self.category_data)
+        self.assertEqual(response.status_code, 302)
+        response = self.client().post('/create_recipe?category_id=1', data=self.recipe_data)
         self.assertEqual(response.status_code, 302)
         response = self.client().get('/home')
         self.assertEqual(response.status_code, 200)
@@ -238,6 +244,8 @@ class RecipeTests(unittest.TestCase):
         self.assertEqual(response.status_code, 404)
         response = self.client().post('/create_category', data=self.category_data)
         self.assertEqual(response.status_code, 302)
+        response = self.client().get('/update_recipe?category_id=2&recipe_id=1')
+        self.assertEqual(response.status_code, 404)
         response = self.client().get('/update_recipe?category_id=1&recipe_id=2')
         self.assertEqual(response.status_code, 404)
 
@@ -254,6 +262,8 @@ class RecipeTests(unittest.TestCase):
         self.recipe_data['recipe_name'] = 'Espresso Classic'
         response = self.client().post('/create_recipe?category_id=1', data=self.recipe_data)
         self.assertEqual(response.status_code, 302)
+        response = self.client().get('/delete_recipe?category_id=1&recipe_id=2')
+        self.assertEqual(response.status_code, 200)
         response = self.client().post('/delete_recipe?category_id=1&recipe_id=2')
         self.assertEqual(response.status_code, 302)
 
@@ -269,6 +279,8 @@ class RecipeTests(unittest.TestCase):
         self.assertEqual(response.status_code, 404)
         response = self.client().post('/create_category', data=self.category_data)
         self.assertEqual(response.status_code, 302)
+        response = self.client().get('/delete_recipe?category_id=2&recipe_id=1')
+        self.assertEqual(response.status_code, 404)
         response = self.client().get('/delete_recipe?category_id=1&recipe_id=2')
         self.assertEqual(response.status_code, 404)
 
